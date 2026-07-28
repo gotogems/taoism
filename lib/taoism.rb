@@ -5,6 +5,7 @@ require 'taoism/lexer'
 require 'taoism/parser'
 require 'taoism/runtime'
 require 'taoism/environment'
+require 'taoism/evaluator'
 
 module Taoism
   LexicalError = Struct.new(:code, :message, :pos)

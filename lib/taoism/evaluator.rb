@@ -41,7 +41,7 @@ module Taoism
         else
           target = evaluate(node.target.target, env)
           case node.target
-          when Nodes::Field
+          when Nodes::DotExpr
             target.fields[node.target.name] = val
           when Nodes::Index
             target[evaluate(node.target.index, env)] = val
@@ -118,7 +118,7 @@ module Taoism
       when Nodes::Call
         args = node.args.map { |a| evaluate(a, env) }
 
-        if node.callee.is_a?(Nodes::Field)
+        if node.callee.is_a?(Nodes::DotExpr)
           target = evaluate(node.callee.target, env)
 
           unless target.is_a?(Runtime::Instance)
@@ -170,7 +170,7 @@ module Taoism
             raise Runtime::Error, "not callable: #{callee.inspect}"
           end
         end
-      when Nodes::Field
+      when Nodes::DotExpr
         target = evaluate(node.target, env)
 
         if target.is_a?(Runtime::Instance)

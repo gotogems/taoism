@@ -207,7 +207,7 @@ rule
     { result = Nodes::Index.new(val[0], val[2],
         val[0].start, val[3].end) }
                | postfix_expr DOT IDENTIFIER
-    { result = Nodes::Field.new(val[0], val[2].lexeme,
+    { result = Nodes::DotExpr.new(val[0], val[2].lexeme,
         val[0].start, val[2].end) }
 
   primary : INT

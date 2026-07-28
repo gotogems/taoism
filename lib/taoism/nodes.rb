@@ -30,7 +30,7 @@ module Taoism
     UnaryOp      = Struct.new(:op, :operand, :start, :end)
     Call         = Struct.new(:callee, :args, :start, :end)
     Index        = Struct.new(:target, :index, :start, :end)
-    Field = Struct.new(:target, :name, :start, :end)
+    DotExpr      = Struct.new(:target, :name, :start, :end)
     Identifier   = Struct.new(:name, :start, :end)
 
     # ── Literals ──
