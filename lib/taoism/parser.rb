@@ -743,7 +743,7 @@ module_eval(<<'.,.,', 'parser.y', 66)
 
 module_eval(<<'.,.,', 'parser.y', 69)
   def _reduce_22(val, _values, result)
-     result = Nodes::LetDestructure.new(val[1].lexeme, val[3].lexeme, val[5],
+     result = Nodes::LetPair.new(val[1].lexeme, val[3].lexeme, val[5],
         val[0].start, val[5].end)
     result
   end
@@ -1085,7 +1085,7 @@ module_eval(<<'.,.,', 'parser.y', 206)
 
 module_eval(<<'.,.,', 'parser.y', 209)
   def _reduce_71(val, _values, result)
-     result = Nodes::MemberAccess.new(val[0], val[2].lexeme,
+     result = Nodes::Field.new(val[0], val[2].lexeme,
         val[0].start, val[2].end)
     result
   end

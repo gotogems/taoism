@@ -5,7 +5,7 @@ module Taoism
 
     # ── Statements ──
     Let            = Struct.new(:name, :value, :mutable, :start, :end)
-    LetDestructure = Struct.new(:err_name, :val_name, :expr, :start, :end)
+    LetPair = Struct.new(:first, :second, :expr, :start, :end)
     Assign         = Struct.new(:target, :value, :start, :end)
     Const          = Struct.new(:name, :value, :start, :end)
     Import         = Struct.new(:path, :start, :end)
@@ -30,7 +30,7 @@ module Taoism
     UnaryOp      = Struct.new(:op, :operand, :start, :end)
     Call         = Struct.new(:callee, :args, :start, :end)
     Index        = Struct.new(:target, :index, :start, :end)
-    MemberAccess = Struct.new(:target, :name, :start, :end)
+    Field = Struct.new(:target, :name, :start, :end)
     Identifier   = Struct.new(:name, :start, :end)
 
     # ── Literals ──

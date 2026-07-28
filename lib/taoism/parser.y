@@ -67,7 +67,7 @@ rule
     { result = Nodes::Let.new(val[2].lexeme, val[4], true,
         val[0].start, val[4].end) }
            | LET IDENTIFIER COMMA IDENTIFIER EQUAL expr
-    { result = Nodes::LetDestructure.new(val[1].lexeme, val[3].lexeme, val[5],
+    { result = Nodes::LetPair.new(val[1].lexeme, val[3].lexeme, val[5],
         val[0].start, val[5].end) }
 
   assign_stmt : postfix_expr EQUAL expr
@@ -207,7 +207,7 @@ rule
     { result = Nodes::Index.new(val[0], val[2],
         val[0].start, val[3].end) }
                | postfix_expr DOT IDENTIFIER
-    { result = Nodes::MemberAccess.new(val[0], val[2].lexeme,
+    { result = Nodes::Field.new(val[0], val[2].lexeme,
         val[0].start, val[2].end) }
 
   primary : INT
