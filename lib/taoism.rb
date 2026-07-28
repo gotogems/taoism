@@ -1,6 +1,6 @@
 require 'taoism/token_type'
 require 'taoism/token'
-require 'taoism/ast'
+require 'taoism/nodes'
 require 'taoism/lexer'
 require 'taoism/parser'
 

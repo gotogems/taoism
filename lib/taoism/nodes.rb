@@ -1,5 +1,5 @@
 module Taoism
-  module AST
+  module Nodes
     # ── Top Level ──
     Program = Struct.new(:stmts, :start, :end)
 

@@ -41,9 +41,9 @@ private
 
 def identifier_or_none(tok)
   if tok.lexeme == 'None'
-    AST::NoneLit.new(tok.start, tok.end)
+    Nodes::NoneLit.new(tok.start, tok.end)
   else
-    AST::Identifier.new(tok.lexeme, tok.start, tok.end)
+    Nodes::Identifier.new(tok.lexeme, tok.start, tok.end)
   end
 end
 
@@ -651,7 +651,7 @@ module_eval(<<'.,.,', 'parser.y', 27)
   def _reduce_1(val, _values, result)
           first = val[0].first
       last  = val[0].last
-      result = AST::Program.new(val[0],
+      result = Nodes::Program.new(val[0],
         first ? first.start : nil,
         last  ? last.end   : nil)
 
@@ -727,7 +727,7 @@ module_eval(<<'.,.,', 'parser.y', 53)
 
 module_eval(<<'.,.,', 'parser.y', 63)
   def _reduce_20(val, _values, result)
-     result = AST::Let.new(val[1].lexeme, val[3], false,
+     result = Nodes::Let.new(val[1].lexeme, val[3], false,
         val[0].start, val[3].end)
     result
   end
@@ -735,7 +735,7 @@ module_eval(<<'.,.,', 'parser.y', 63)
 
 module_eval(<<'.,.,', 'parser.y', 66)
   def _reduce_21(val, _values, result)
-     result = AST::Let.new(val[2].lexeme, val[4], true,
+     result = Nodes::Let.new(val[2].lexeme, val[4], true,
         val[0].start, val[4].end)
     result
   end
@@ -743,7 +743,7 @@ module_eval(<<'.,.,', 'parser.y', 66)
 
 module_eval(<<'.,.,', 'parser.y', 69)
   def _reduce_22(val, _values, result)
-     result = AST::LetDestructure.new(val[1].lexeme, val[3].lexeme, val[5],
+     result = Nodes::LetDestructure.new(val[1].lexeme, val[3].lexeme, val[5],
         val[0].start, val[5].end)
     result
   end
@@ -751,7 +751,7 @@ module_eval(<<'.,.,', 'parser.y', 69)
 
 module_eval(<<'.,.,', 'parser.y', 73)
   def _reduce_23(val, _values, result)
-     result = AST::Assign.new(val[0], val[2],
+     result = Nodes::Assign.new(val[0], val[2],
         val[0].start, val[2].end)
     result
   end
@@ -759,7 +759,7 @@ module_eval(<<'.,.,', 'parser.y', 73)
 
 module_eval(<<'.,.,', 'parser.y', 77)
   def _reduce_24(val, _values, result)
-     result = AST::Const.new(val[1].lexeme, val[3],
+     result = Nodes::Const.new(val[1].lexeme, val[3],
         val[0].start, val[3].end)
     result
   end
@@ -767,7 +767,7 @@ module_eval(<<'.,.,', 'parser.y', 77)
 
 module_eval(<<'.,.,', 'parser.y', 81)
   def _reduce_25(val, _values, result)
-     result = AST::Import.new(val[1],
+     result = Nodes::Import.new(val[1],
         val[0].start, val[0].end)
     result
   end
@@ -775,7 +775,7 @@ module_eval(<<'.,.,', 'parser.y', 81)
 
 module_eval(<<'.,.,', 'parser.y', 85)
   def _reduce_26(val, _values, result)
-     result = AST::Package.new(val[1].lexeme,
+     result = Nodes::Package.new(val[1].lexeme,
         val[0].start, val[1].end)
     result
   end
@@ -797,7 +797,7 @@ module_eval(<<'.,.,', 'parser.y', 89)
 
 module_eval(<<'.,.,', 'parser.y', 92)
   def _reduce_29(val, _values, result)
-     result = AST::Return.new(val[1],
+     result = Nodes::Return.new(val[1],
         val[0].start, val[1].end)
     result
   end
@@ -805,14 +805,14 @@ module_eval(<<'.,.,', 'parser.y', 92)
 
 module_eval(<<'.,.,', 'parser.y', 96)
   def _reduce_30(val, _values, result)
-     result = AST::Leave.new(val[0].start, val[0].end)
+     result = Nodes::Leave.new(val[0].start, val[0].end)
     result
   end
 .,.,
 
 module_eval(<<'.,.,', 'parser.y', 99)
   def _reduce_31(val, _values, result)
-     result = AST::ExprStmt.new(val[0],
+     result = Nodes::ExprStmt.new(val[0],
         val[0].start, val[0].end)
     result
   end
@@ -820,7 +820,7 @@ module_eval(<<'.,.,', 'parser.y', 99)
 
 module_eval(<<'.,.,', 'parser.y', 103)
   def _reduce_32(val, _values, result)
-     result = AST::FunDef.new(val[1].lexeme, val[3], val[5], nil,
+     result = Nodes::FunDef.new(val[1].lexeme, val[3], val[5], nil,
         val[0].start, val[5].end)
     result
   end
@@ -828,8 +828,8 @@ module_eval(<<'.,.,', 'parser.y', 103)
 
 module_eval(<<'.,.,', 'parser.y', 107)
   def _reduce_33(val, _values, result)
-     result = AST::FunDef.new(val[5].lexeme, val[8], val[9],
-        AST::Receiver.new(val[2].lexeme, val[3].lexeme,
+     result = Nodes::FunDef.new(val[5].lexeme, val[8], val[9],
+        Nodes::Receiver.new(val[2].lexeme, val[3].lexeme,
           val[1].start, val[4].end),
         val[0].start, val[9].end)
     result
@@ -866,7 +866,7 @@ module_eval(<<'.,.,', 'parser.y', 116)
 
 module_eval(<<'.,.,', 'parser.y', 119)
   def _reduce_38(val, _values, result)
-     result = AST::DataDef.new(val[1].lexeme, val[3],
+     result = Nodes::DataDef.new(val[1].lexeme, val[3],
         val[0].start, val[4].end)
     result
   end
@@ -888,7 +888,7 @@ module_eval(<<'.,.,', 'parser.y', 123)
 
 module_eval(<<'.,.,', 'parser.y', 126)
   def _reduce_41(val, _values, result)
-     result = AST::Field.new(val[0].lexeme, nil,
+     result = Nodes::Field.new(val[0].lexeme, nil,
         val[0].start, val[0].end)
     result
   end
@@ -896,7 +896,7 @@ module_eval(<<'.,.,', 'parser.y', 126)
 
 module_eval(<<'.,.,', 'parser.y', 129)
   def _reduce_42(val, _values, result)
-     result = AST::Field.new(val[0].lexeme, val[2],
+     result = Nodes::Field.new(val[0].lexeme, val[2],
         val[0].start, val[2].end)
     result
   end
@@ -904,7 +904,7 @@ module_eval(<<'.,.,', 'parser.y', 129)
 
 module_eval(<<'.,.,', 'parser.y', 133)
   def _reduce_43(val, _values, result)
-     result = AST::Block.new(val[1],
+     result = Nodes::Block.new(val[1],
         val[0].start, val[2].end)
     result
   end
@@ -921,7 +921,7 @@ module_eval(<<'.,.,', 'parser.y', 136)
 
 module_eval(<<'.,.,', 'parser.y', 140)
   def _reduce_46(val, _values, result)
-     result = AST::BinaryOp.new(val[0], :or, val[2],
+     result = Nodes::BinaryOp.new(val[0], :or, val[2],
         val[0].start, val[2].end)
     result
   end
@@ -931,7 +931,7 @@ module_eval(<<'.,.,', 'parser.y', 140)
 
 module_eval(<<'.,.,', 'parser.y', 145)
   def _reduce_48(val, _values, result)
-     result = AST::BinaryOp.new(val[0], :and, val[2],
+     result = Nodes::BinaryOp.new(val[0], :and, val[2],
         val[0].start, val[2].end)
     result
   end
@@ -941,7 +941,7 @@ module_eval(<<'.,.,', 'parser.y', 145)
 
 module_eval(<<'.,.,', 'parser.y', 150)
   def _reduce_50(val, _values, result)
-     result = AST::BinaryOp.new(val[0], :'==', val[2],
+     result = Nodes::BinaryOp.new(val[0], :'==', val[2],
         val[0].start, val[2].end)
     result
   end
@@ -949,7 +949,7 @@ module_eval(<<'.,.,', 'parser.y', 150)
 
 module_eval(<<'.,.,', 'parser.y', 153)
   def _reduce_51(val, _values, result)
-     result = AST::BinaryOp.new(val[0], :'!=', val[2],
+     result = Nodes::BinaryOp.new(val[0], :'!=', val[2],
         val[0].start, val[2].end)
     result
   end
@@ -957,7 +957,7 @@ module_eval(<<'.,.,', 'parser.y', 153)
 
 module_eval(<<'.,.,', 'parser.y', 156)
   def _reduce_52(val, _values, result)
-     result = AST::BinaryOp.new(val[0], :'>', val[2],
+     result = Nodes::BinaryOp.new(val[0], :'>', val[2],
         val[0].start, val[2].end)
     result
   end
@@ -965,7 +965,7 @@ module_eval(<<'.,.,', 'parser.y', 156)
 
 module_eval(<<'.,.,', 'parser.y', 159)
   def _reduce_53(val, _values, result)
-     result = AST::BinaryOp.new(val[0], :'>=', val[2],
+     result = Nodes::BinaryOp.new(val[0], :'>=', val[2],
         val[0].start, val[2].end)
     result
   end
@@ -973,7 +973,7 @@ module_eval(<<'.,.,', 'parser.y', 159)
 
 module_eval(<<'.,.,', 'parser.y', 162)
   def _reduce_54(val, _values, result)
-     result = AST::BinaryOp.new(val[0], :'<', val[2],
+     result = Nodes::BinaryOp.new(val[0], :'<', val[2],
         val[0].start, val[2].end)
     result
   end
@@ -981,7 +981,7 @@ module_eval(<<'.,.,', 'parser.y', 162)
 
 module_eval(<<'.,.,', 'parser.y', 165)
   def _reduce_55(val, _values, result)
-     result = AST::BinaryOp.new(val[0], :'<=', val[2],
+     result = Nodes::BinaryOp.new(val[0], :'<=', val[2],
         val[0].start, val[2].end)
     result
   end
@@ -991,7 +991,7 @@ module_eval(<<'.,.,', 'parser.y', 165)
 
 module_eval(<<'.,.,', 'parser.y', 170)
   def _reduce_57(val, _values, result)
-     result = AST::BinaryOp.new(val[0], :'+', val[2],
+     result = Nodes::BinaryOp.new(val[0], :'+', val[2],
         val[0].start, val[2].end)
     result
   end
@@ -999,7 +999,7 @@ module_eval(<<'.,.,', 'parser.y', 170)
 
 module_eval(<<'.,.,', 'parser.y', 173)
   def _reduce_58(val, _values, result)
-     result = AST::BinaryOp.new(val[0], :'-', val[2],
+     result = Nodes::BinaryOp.new(val[0], :'-', val[2],
         val[0].start, val[2].end)
     result
   end
@@ -1009,7 +1009,7 @@ module_eval(<<'.,.,', 'parser.y', 173)
 
 module_eval(<<'.,.,', 'parser.y', 178)
   def _reduce_60(val, _values, result)
-     result = AST::BinaryOp.new(val[0], :'*', val[2],
+     result = Nodes::BinaryOp.new(val[0], :'*', val[2],
         val[0].start, val[2].end)
     result
   end
@@ -1017,7 +1017,7 @@ module_eval(<<'.,.,', 'parser.y', 178)
 
 module_eval(<<'.,.,', 'parser.y', 181)
   def _reduce_61(val, _values, result)
-     result = AST::BinaryOp.new(val[0], :'/', val[2],
+     result = Nodes::BinaryOp.new(val[0], :'/', val[2],
         val[0].start, val[2].end)
     result
   end
@@ -1025,7 +1025,7 @@ module_eval(<<'.,.,', 'parser.y', 181)
 
 module_eval(<<'.,.,', 'parser.y', 184)
   def _reduce_62(val, _values, result)
-     result = AST::BinaryOp.new(val[0], :'%', val[2],
+     result = Nodes::BinaryOp.new(val[0], :'%', val[2],
         val[0].start, val[2].end)
     result
   end
@@ -1033,7 +1033,7 @@ module_eval(<<'.,.,', 'parser.y', 184)
 
 module_eval(<<'.,.,', 'parser.y', 188)
   def _reduce_63(val, _values, result)
-     result = AST::UnaryOp.new(:'-', val[1],
+     result = Nodes::UnaryOp.new(:'-', val[1],
         val[0].start, val[1].end)
     result
   end
@@ -1041,7 +1041,7 @@ module_eval(<<'.,.,', 'parser.y', 188)
 
 module_eval(<<'.,.,', 'parser.y', 191)
   def _reduce_64(val, _values, result)
-     result = AST::UnaryOp.new(:'!', val[1],
+     result = Nodes::UnaryOp.new(:'!', val[1],
         val[0].start, val[1].end)
     result
   end
@@ -1049,7 +1049,7 @@ module_eval(<<'.,.,', 'parser.y', 191)
 
 module_eval(<<'.,.,', 'parser.y', 194)
   def _reduce_65(val, _values, result)
-     result = AST::UnaryOp.new(:'!', val[1],
+     result = Nodes::UnaryOp.new(:'!', val[1],
         val[0].start, val[1].end)
     result
   end
@@ -1061,7 +1061,7 @@ module_eval(<<'.,.,', 'parser.y', 194)
 
 module_eval(<<'.,.,', 'parser.y', 200)
   def _reduce_68(val, _values, result)
-     result = AST::Identifier.new(val[0].lexeme,
+     result = Nodes::Identifier.new(val[0].lexeme,
         val[0].start, val[0].end)
     result
   end
@@ -1069,7 +1069,7 @@ module_eval(<<'.,.,', 'parser.y', 200)
 
 module_eval(<<'.,.,', 'parser.y', 203)
   def _reduce_69(val, _values, result)
-     result = AST::Call.new(val[0], val[2],
+     result = Nodes::Call.new(val[0], val[2],
         val[0].start, val[3].end)
     result
   end
@@ -1077,7 +1077,7 @@ module_eval(<<'.,.,', 'parser.y', 203)
 
 module_eval(<<'.,.,', 'parser.y', 206)
   def _reduce_70(val, _values, result)
-     result = AST::Index.new(val[0], val[2],
+     result = Nodes::Index.new(val[0], val[2],
         val[0].start, val[3].end)
     result
   end
@@ -1085,7 +1085,7 @@ module_eval(<<'.,.,', 'parser.y', 206)
 
 module_eval(<<'.,.,', 'parser.y', 209)
   def _reduce_71(val, _values, result)
-     result = AST::MemberAccess.new(val[0], val[2].lexeme,
+     result = Nodes::MemberAccess.new(val[0], val[2].lexeme,
         val[0].start, val[2].end)
     result
   end
@@ -1093,7 +1093,7 @@ module_eval(<<'.,.,', 'parser.y', 209)
 
 module_eval(<<'.,.,', 'parser.y', 213)
   def _reduce_72(val, _values, result)
-     result = AST::IntLit.new(parse_int(val[0]),
+     result = Nodes::IntLit.new(parse_int(val[0]),
         val[0].start, val[0].end)
     result
   end
@@ -1101,7 +1101,7 @@ module_eval(<<'.,.,', 'parser.y', 213)
 
 module_eval(<<'.,.,', 'parser.y', 216)
   def _reduce_73(val, _values, result)
-     result = AST::FloatLit.new(parse_float(val[0]),
+     result = Nodes::FloatLit.new(parse_float(val[0]),
         val[0].start, val[0].end)
     result
   end
@@ -1109,7 +1109,7 @@ module_eval(<<'.,.,', 'parser.y', 216)
 
 module_eval(<<'.,.,', 'parser.y', 219)
   def _reduce_74(val, _values, result)
-     result = AST::StringLit.new(parse_string(val[0]),
+     result = Nodes::StringLit.new(parse_string(val[0]),
         val[0].start, val[0].end)
     result
   end
@@ -1117,7 +1117,7 @@ module_eval(<<'.,.,', 'parser.y', 219)
 
 module_eval(<<'.,.,', 'parser.y', 222)
   def _reduce_75(val, _values, result)
-     result = AST::BoolLit.new(val[0].lexeme == 'True',
+     result = Nodes::BoolLit.new(val[0].lexeme == 'True',
         val[0].start, val[0].end)
     result
   end
@@ -1142,7 +1142,7 @@ module_eval(<<'.,.,', 'parser.y', 225)
 
 module_eval(<<'.,.,', 'parser.y', 233)
   def _reduce_82(val, _values, result)
-     result = AST::ListLit.new(val[1],
+     result = Nodes::ListLit.new(val[1],
         val[0].start, val[2].end)
     result
   end
@@ -1150,7 +1150,7 @@ module_eval(<<'.,.,', 'parser.y', 233)
 
 module_eval(<<'.,.,', 'parser.y', 236)
   def _reduce_83(val, _values, result)
-     result = AST::ListLit.new([],
+     result = Nodes::ListLit.new([],
         val[0].start, val[1].end)
     result
   end
@@ -1172,7 +1172,7 @@ module_eval(<<'.,.,', 'parser.y', 240)
 
 module_eval(<<'.,.,', 'parser.y', 243)
   def _reduce_86(val, _values, result)
-     result = AST::If.new(val[1], val[2], val[3],
+     result = Nodes::If.new(val[1], val[2], val[3],
         val[0].start, val[3] ? val[3].end : val[2].end)
     result
   end
@@ -1201,14 +1201,14 @@ module_eval(<<'.,.,', 'parser.y', 248)
 
 module_eval(<<'.,.,', 'parser.y', 251)
   def _reduce_90(val, _values, result)
-     result = AST::Loop.new(val[1], val[0].start, val[1].end)
+     result = Nodes::Loop.new(val[1], val[0].start, val[1].end)
     result
   end
 .,.,
 
 module_eval(<<'.,.,', 'parser.y', 254)
   def _reduce_91(val, _values, result)
-     result = AST::Switch.new(val[1], val[3], nil,
+     result = Nodes::Switch.new(val[1], val[3], nil,
         val[0].start, val[4].end)
     result
   end
@@ -1216,7 +1216,7 @@ module_eval(<<'.,.,', 'parser.y', 254)
 
 module_eval(<<'.,.,', 'parser.y', 257)
   def _reduce_92(val, _values, result)
-     result = AST::Switch.new(val[1], val[3], val[4],
+     result = Nodes::Switch.new(val[1], val[3], val[4],
         val[0].start, val[5].end)
     result
   end
@@ -1224,7 +1224,7 @@ module_eval(<<'.,.,', 'parser.y', 257)
 
 module_eval(<<'.,.,', 'parser.y', 260)
   def _reduce_93(val, _values, result)
-     result = AST::Switch.new(val[1], [], val[3],
+     result = Nodes::Switch.new(val[1], [], val[3],
         val[0].start, val[4].end)
     result
   end
@@ -1246,7 +1246,7 @@ module_eval(<<'.,.,', 'parser.y', 264)
 
 module_eval(<<'.,.,', 'parser.y', 267)
   def _reduce_96(val, _values, result)
-     result = AST::SwitchArm.new(val[0], val[2],
+     result = Nodes::SwitchArm.new(val[0], val[2],
         val[0].start, val[2].end)
     result
   end
@@ -1261,7 +1261,7 @@ module_eval(<<'.,.,', 'parser.y', 270)
 
 module_eval(<<'.,.,', 'parser.y', 273)
   def _reduce_98(val, _values, result)
-     result = AST::Try.new(val[1],
+     result = Nodes::Try.new(val[1],
         val[0].start, val[1].end)
     result
   end
@@ -1269,7 +1269,7 @@ module_eval(<<'.,.,', 'parser.y', 273)
 
 module_eval(<<'.,.,', 'parser.y', 277)
   def _reduce_99(val, _values, result)
-     result = AST::FunDef.new(nil, val[3], val[5], nil,
+     result = Nodes::FunDef.new(nil, val[3], val[5], nil,
         val[0].start, val[5].end)
     result
   end
