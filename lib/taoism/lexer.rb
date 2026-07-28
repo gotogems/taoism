@@ -56,7 +56,7 @@ module Taoism
           next
         end
 
-        scan_token(char)
+        return scan_token(char)
       end
     end
 
@@ -166,6 +166,7 @@ module Taoism
       if peek == '.' && digit?(peek_next)
         type = TokenType::FLOAT
         advance
+
         while digit?(peek) || peek == '_'
           advance
         end
@@ -197,11 +198,16 @@ module Taoism
     end
 
     def peek
+      return "\0" if at_end?
       @source[@offset]
     end
 
     def peek_next
-      @source[@offset + 1]
+      if @offset.next < @source.length
+        @source[@offset + 1]
+      else
+        "\0"
+      end
     end
 
     def advance

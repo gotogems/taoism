@@ -23,7 +23,7 @@ prechigh
 preclow
 
 rule
-  program : stmt_list
+  program : top_stmts
     {
       first = val[0].first
       last  = val[0].last
@@ -32,20 +32,33 @@ rule
         last  ? last.end   : nil)
     }
 
-  stmt_list : /* none */        { result = [] }
-            | stmt_list stmt    { val[0] << val[1]; result = val[0] }
+  top_stmts : /* none */
+    { result = [] }
+            | top_stmts top_stmt
+    { val[0] << val[1]; result = val[0] }
+            | top_stmts top_stmt SEMI
+    { val[0] << val[1]; result = val[0] }
 
-  stmt : let_stmt
-       | assign_stmt
-       | const_stmt
-       | fun_def
-       | data_def
-       | import_stmt
-       | package_stmt
-       | return_stmt
-       | leave_stmt
-       | loop_stmt
-       | expr_stmt
+  top_stmt : const_stmt
+           | fun_def
+           | data_def
+           | import_stmt
+           | package_stmt
+           | expr_stmt
+
+  block_stmts : /* none */
+    { result = [] }
+              | block_stmts block_stmt
+    { val[0] << val[1]; result = val[0] }
+              | block_stmts block_stmt SEMI
+    { val[0] << val[1]; result = val[0] }
+
+  block_stmt : let_stmt
+             | assign_stmt
+             | return_stmt
+             | leave_stmt
+             | loop_stmt
+             | expr_stmt
 
   let_stmt : LET IDENTIFIER EQUAL expr
     { result = AST::Let.new(val[1].lexeme, val[3], false,
@@ -57,19 +70,9 @@ rule
     { result = AST::LetDestructure.new(val[1].lexeme, val[3].lexeme, val[5],
         val[0].start, val[5].end) }
 
-  assign_stmt : lvalue EQUAL expr
+  assign_stmt : postfix_expr EQUAL expr
     { result = AST::Assign.new(val[0], val[2],
         val[0].start, val[2].end) }
-
-  lvalue : IDENTIFIER
-    { result = AST::Identifier.new(val[0].lexeme,
-        val[0].start, val[0].end) }
-         | lvalue DOT IDENTIFIER
-    { result = AST::MemberAccess.new(val[0], val[2].lexeme,
-        val[0].start, val[2].end) }
-         | lvalue LSQUARE expr RSQUARE
-    { result = AST::Index.new(val[0], val[2],
-        val[0].start, val[3].end) }
 
   const_stmt : CONST IDENTIFIER EQUAL expr
     { result = AST::Const.new(val[1].lexeme, val[3],
@@ -102,10 +105,10 @@ rule
         val[0].start, val[5].end) }
           | FUN LPAREN IDENTIFIER IDENTIFIER RPAREN
                  IDENTIFIER LPAREN params RPAREN block
-    { result = AST::FunDef.new(val[5].lexeme, val[8], val[10],
+    { result = AST::FunDef.new(val[5].lexeme, val[8], val[9],
         AST::Receiver.new(val[2].lexeme, val[3].lexeme,
           val[1].start, val[4].end),
-        val[0].start, val[10].end) }
+        val[0].start, val[9].end) }
 
   params : /* none */            { result = [] }
          | param_list            { result = val[0] }
@@ -120,11 +123,14 @@ rule
   field_list : field                   { result = [val[0]] }
              | field_list field        { val[0] << val[1]; result = val[0] }
 
-  field : IDENTIFIER EQUAL expr
+  field : IDENTIFIER
+    { result = AST::Field.new(val[0].lexeme, nil,
+        val[0].start, val[0].end) }
+        | IDENTIFIER EQUAL expr
     { result = AST::Field.new(val[0].lexeme, val[2],
         val[0].start, val[2].end) }
 
-  block : LBRACE stmt_list RBRACE
+  block : LBRACE block_stmts RBRACE
     { result = AST::Block.new(val[1],
         val[0].start, val[2].end) }
 
@@ -185,10 +191,15 @@ rule
              | BANG unary_expr
     { result = AST::UnaryOp.new(:'!', val[1],
         val[0].start, val[1].end) }
+             | NOT unary_expr
+    { result = AST::UnaryOp.new(:'!', val[1],
+        val[0].start, val[1].end) }
              | postfix_expr
 
   postfix_expr : primary
-               | lvalue
+               | IDENTIFIER
+    { result = AST::Identifier.new(val[0].lexeme,
+        val[0].start, val[0].end) }
                | postfix_expr LPAREN args RPAREN
     { result = AST::Call.new(val[0], val[2],
         val[0].start, val[3].end) }
@@ -229,9 +240,9 @@ rule
   args : expr             { result = [val[0]] }
        | args COMMA expr  { val[0] << val[2]; result = val[0] }
 
-  if_expr : IF LPAREN expr RPAREN block else_clause
-    { result = AST::If.new(val[2], val[4], val[5],
-        val[0].start, val[5] ? val[5].end : val[4].end) }
+  if_expr : IF expr block else_clause
+    { result = AST::If.new(val[1], val[2], val[3],
+        val[0].start, val[3] ? val[3].end : val[2].end) }
 
   else_clause : ELSE block    { result = val[1] }
               | ELSE if_expr  { result = val[1] }
@@ -271,6 +282,8 @@ end
 
 ---- inner
 
+attr_reader :errors
+
 def initialize(lexer)
   @lexer = lexer
   @errors = []
@@ -287,8 +300,12 @@ def next_token
 end
 
 def on_error(error_id, val, stack)
-  tok = val[0] || stack.last
-  msg = "unexpected token #{tok.lexeme.inspect} at #{tok.start.line}:#{tok.start.col}"
+  tok = Array(val).first
+  msg = if tok.respond_to?(:lexeme)
+    "unexpected token #{tok.lexeme.inspect} at #{tok.start.line}:#{tok.start.col}"
+  else
+    "parse error"
+  end
   @errors << msg
 end
 
