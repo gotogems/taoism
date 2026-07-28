@@ -1,3 +1,5 @@
 #!/usr/bin/env ruby
-
 require 'taoism'
+require 'taoism/console'
+
+Taoism::Console.new.run

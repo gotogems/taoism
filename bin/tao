@@ -1,0 +1,33 @@
+#!/usr/bin/env ruby
+require 'taoism'
+
+source = if $stdin.tty?
+  filepath, _ = ARGV.reject { _1.start_with?('-') }
+
+  if filepath.nil?
+    puts "Tao is a toy language."
+    exit 0
+  end
+
+  if File.exist?(filepath)
+    File.read(filepath)
+  else
+    $stderr.puts "No such file - #{filepath}"
+    exit 1
+  end
+else
+  ARGF.read
+end
+
+lexer = Taoism::Lexer.new(source)
+parser = Taoism::Parser.new(lexer)
+
+ast = parser.parse
+
+if parser.errors.empty?
+  evaluator = Taoism::Evaluator.new
+  result = evaluator.evaluate(ast)
+else
+  parser.errors.each { |e| $stderr.puts e }
+  exit 1
+end
