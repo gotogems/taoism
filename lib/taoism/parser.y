@@ -1,7 +1,7 @@
 class Taoism::Parser
 
 token
-  ILLEGAL IDENTIFIER STRING FLOAT INT BOOL
+  ILLEGAL IDENTIFIER STRING FLOAT INT BOOL NONE
   PLUS MINUS STAR SLASH MODULO
   GREATER GREATEREQ LESS LESSEQ EQUAL EQUALEQ BANG BANGEQ
   AND OR NOT PIPE
@@ -222,6 +222,8 @@ rule
           | BOOL
     { result = Nodes::BoolLit.new(val[0].lexeme == 'True',
         val[0].start, val[0].end) }
+          | NONE
+    { result = Nodes::NoneLit.new(val[0].start, val[0].end) }
           | LPAREN expr RPAREN
     { result = val[1] }
           | list_lit
@@ -310,14 +312,6 @@ def on_error(error_id, val, stack)
 end
 
 private
-
-def identifier_or_none(tok)
-  if tok.lexeme == 'None'
-    Nodes::NoneLit.new(tok.start, tok.end)
-  else
-    Nodes::Identifier.new(tok.lexeme, tok.start, tok.end)
-  end
-end
 
 def parse_int(tok)
   tok.lexeme.delete('_').to_i

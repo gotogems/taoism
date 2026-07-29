@@ -6,6 +6,7 @@ module Taoism
     FLOAT      = :FLOAT
     INT        = :INT
     BOOL       = :BOOL
+    NONE       = :NONE
 
     PLUS   = :PLUS
     MINUS  = :MINUS

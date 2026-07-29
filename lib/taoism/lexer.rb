@@ -111,14 +111,16 @@ module Taoism
 
       str = lexeme
 
-      if str == 'True' || str == 'False'
-        return make_token(TokenType::BOOL)
-      end
-
-      if type = KEYWORDS[str]
-        make_token(type)
+      if bool_token?(str)
+        make_token(TokenType::BOOL)
+      elsif none_token?(str)
+        make_token(TokenType::NONE)
       else
-        make_token(TokenType::IDENTIFIER)
+        if type = KEYWORDS[str]
+          make_token(type)
+        else
+          make_token(TokenType::IDENTIFIER)
+        end
       end
     end
 
@@ -219,6 +221,14 @@ module Taoism
 
     def at_end?
       @offset >= @source.length
+    end
+
+    def bool_token?(str)
+      str == 'True' || str == 'False'
+    end
+
+    def none_token?(str)
+      str == 'None'
     end
 
     def whitespace?(char)
