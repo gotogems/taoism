@@ -232,15 +232,13 @@ rule
           | try_expr
           | fun_lit
 
-  list_lit : LSQUARE args RSQUARE
+   list_lit : LSQUARE args RSQUARE
     { result = Nodes::ListLit.new(val[1],
         val[0].start, val[2].end) }
-           | LSQUARE RSQUARE
-    { result = Nodes::ListLit.new([],
-        val[0].start, val[1].end) }
 
-  args : expr             { result = [val[0]] }
-       | args COMMA expr  { val[0] << val[2]; result = val[0] }
+   args : /* none */     { result = [] }
+        | expr             { result = [val[0]] }
+        | args COMMA expr  { val[0] << val[2]; result = val[0] }
 
   if_expr : IF expr block else_clause
     { result = Nodes::If.new(val[1], val[2], val[3],
