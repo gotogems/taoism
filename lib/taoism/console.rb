@@ -44,7 +44,7 @@ module Taoism
           $stderr.puts "Error: #{err}"
         end
       end
-    rescue Runtime::Error => err
+    rescue Runtime::Error, Runtime::Return, Runtime::Leave => err
       $stderr.puts "Error: #{err.message}"
     end
 

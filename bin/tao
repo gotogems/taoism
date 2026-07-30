@@ -26,7 +26,12 @@ ast = parser.parse
 
 if parser.errors.empty?
   evaluator = Taoism::Evaluator.new
-  result = evaluator.evaluate(ast)
+  begin
+    evaluator.evaluate(ast)
+  rescue Runtime::Error => err
+    $stderr.puts "Error: #{err.message}"
+    exit 1
+  end
 else
   parser.errors.each { |e| $stderr.puts e }
   exit 1

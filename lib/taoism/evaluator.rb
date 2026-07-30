@@ -6,6 +6,7 @@ module Taoism
       @builtins = {
         'io.println' => proc { |arg| puts arg.to_s }
       }
+      @in_loop = false
     end
 
     def evaluate(node, env = @global)
@@ -101,6 +102,9 @@ module Taoism
 
         result
       when Nodes::Loop
+        prev = @in_loop
+        @in_loop = true
+
         loop do
           begin
             evaluate(node.body, Environment.new(env))
@@ -108,7 +112,13 @@ module Taoism
             break
           end
         end
+
+        @in_loop = prev
       when Nodes::Leave
+        unless @in_loop
+          raise Runtime::Error, "leave outside loop"
+        end
+
         raise Runtime::Leave
       when Nodes::Return
         result = evaluate(node.value, env)
@@ -199,8 +209,7 @@ module Taoism
             end
 
             callee.fields.each_with_index do |f, i|
-              fields[f.name] = args.length > i
-                ? args[i] : evaluate(f.default, env)
+              fields[f.name] = args.length > i ? args[i] : evaluate(f.default, env)
             end
 
             Runtime::Instance.new(callee.name, fields)
