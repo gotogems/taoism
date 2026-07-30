@@ -45,8 +45,16 @@ module Taoism
           target = evaluate(node.target.target, env)
           case node.target
           when Nodes::DotExpr
+            unless target.is_a?(Runtime::Instance)
+              raise Runtime::Error, "field access on non-instance"
+            end
+
             target.fields[node.target.name] = val
           when Nodes::Index
+            unless target.respond_to?(:[]=)
+              raise Runtime::Error, "index assignment on non-indexable"
+            end
+
             target[evaluate(node.target.index, env)] = val
           else
           end
@@ -202,7 +210,13 @@ module Taoism
         end
       when Nodes::Index
         index = evaluate(node.index, env)
-        evaluate(node.target, env)[index]
+        target = evaluate(node.target, env)
+
+        unless target.respond_to?(:[])
+          raise Runtime::Error, "index access on non-indexable"
+        end
+
+        target[index]
       when Nodes::DataDef
         value = Runtime::DataType.new(node.name, node.fields)
         env.define(node.name, value, mutable: false)
