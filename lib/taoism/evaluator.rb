@@ -21,7 +21,8 @@ module Taoism
       when Nodes::ExprStmt  then evaluate(node.expr, env)
       when Nodes::IntLit    then node.value
       when Nodes::FloatLit  then node.value
-      when Nodes::StringLit then node.value
+      when Nodes::StringLit
+        node.value.gsub(/\\\((\w+)\)/) { env.get($1).to_s }
       when Nodes::BoolLit   then node.value
       when Nodes::NoneLit   then nil
       when Nodes::ListLit
@@ -192,7 +193,8 @@ module Taoism
             end
 
             callee.fields.each_with_index do |f, i|
-              fields[f.name] = args[i] || evaluate(f.default, env)
+              fields[f.name] = args.length > i
+                ? args[i] : evaluate(f.default, env)
             end
 
             Runtime::Instance.new(callee.name, fields)
