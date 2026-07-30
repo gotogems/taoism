@@ -3,6 +3,9 @@ module Taoism
     def initialize
       @global = Environment.new
       @methods = {}
+      @builtins = {
+        'io.println' => proc { |arg| puts arg.to_s }
+      }
     end
 
     def evaluate(node, env = @global)
@@ -119,6 +122,13 @@ module Taoism
         args = node.args.map { |a| evaluate(a, env) }
 
         if node.callee.is_a?(Nodes::DotExpr)
+          if node.callee.target.is_a?(Nodes::Identifier)
+            key = "#{node.callee.target.name}.#{node.callee.name}"
+            if fn = @builtins[key]
+              return fn.call(*args)
+            end
+          end
+
           target = evaluate(node.callee.target, env)
 
           unless target.is_a?(Runtime::Instance)
@@ -130,6 +140,10 @@ module Taoism
 
           unless fn
             raise Runtime::Error, "undefined method: #{key}"
+          end
+
+          if args.length != fn.params.length
+            raise Runtime::Error, arity_error(fn.params.length, args.length)
           end
 
           call_env = Environment.new(fn.closure)
@@ -148,6 +162,10 @@ module Taoism
           callee = evaluate(node.callee, env)
           case callee
           when Runtime::Function
+            if args.length != callee.params.length
+              raise Runtime::Error, arity_error(callee.params.length, args.length)
+            end
+
             call_env = Environment.new(callee.closure)
             callee.params.each_with_index do |p, i|
               call_env.define(p, args[i] || nil, mutable: true)
@@ -160,6 +178,10 @@ module Taoism
             end
           when Runtime::DataType
             fields = {}
+
+            if args.length > callee.fields.length
+              raise Runtime::Error, arity_error("at most #{callee.fields.length}", args.length)
+            end
 
             callee.fields.each_with_index do |f, i|
               fields[f.name] = args[i] || evaluate(f.default, env)
@@ -194,6 +216,10 @@ module Taoism
       when Nodes::Import  then nil
       else
       end
+    end
+
+    def arity_error(expected, got)
+      "expected #{expected} argument(s) but got #{got}"
     end
   end
 end
