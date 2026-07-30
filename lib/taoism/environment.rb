@@ -6,6 +6,10 @@ module Taoism
     end
 
     def define(name, value, mutable: true)
+      if @scope.key?(name)
+        raise Runtime::Error, "already defined variable: #{name}"
+      end
+
       @scope[name] = { value: value, mutable: mutable }
     end
 

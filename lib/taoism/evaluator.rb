@@ -119,7 +119,13 @@ module Taoism
         )
 
         if node.receiver
-          @methods["#{node.receiver.type_name}.#{node.name}"] = fn
+          fn_name = "#{node.receiver.type_name}.#{node.name}"
+
+          if @methods[fn_name]
+            raise Runtime::Error, "already defined method: #{fn_name}"
+          end
+
+          @methods[fn_name] = fn
         end
 
         if node.name
