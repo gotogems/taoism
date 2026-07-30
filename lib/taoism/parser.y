@@ -232,11 +232,11 @@ rule
           | try_expr
           | fun_lit
 
-   list_lit : LSQUARE args RSQUARE
+  list_lit : LSQUARE args RSQUARE
     { result = Nodes::ListLit.new(val[1],
         val[0].start, val[2].end) }
 
-   args : /* none */     { result = [] }
+  args : /* none */     { result = [] }
         | expr             { result = [val[0]] }
         | args COMMA expr  { val[0] << val[2]; result = val[0] }
 
@@ -320,5 +320,14 @@ def parse_float(tok)
 end
 
 def parse_string(tok)
-  tok.lexeme[1...-1]
+  tok.lexeme[1...-1].gsub(/\\(\\|"|n|r|t|0)/) do
+    case $1
+    when '\\' then '\\'
+    when '"'  then '"'
+    when 'n'  then "\n"
+    when 'r'  then "\r"
+    when 't'  then "\t"
+    when '0'  then "\0"
+    end
+  end
 end

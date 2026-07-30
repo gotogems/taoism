@@ -48,7 +48,16 @@ def parse_float(tok)
 end
 
 def parse_string(tok)
-  tok.lexeme[1...-1]
+  tok.lexeme[1...-1].gsub(/\\(\\|"|n|r|t|0)/) do
+    case $1
+    when '\\' then '\\'
+    when '"'  then '"'
+    when 'n'  then "\n"
+    when 'r'  then "\r"
+    when 't'  then "\t"
+    when '0'  then "\0"
+    end
+  end
 end
 ...end parser.y/module_eval...
 ##### State transition tables begin ###
