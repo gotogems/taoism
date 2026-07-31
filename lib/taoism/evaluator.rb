@@ -23,7 +23,17 @@ module Taoism
       when Nodes::IntLit    then node.value
       when Nodes::FloatLit  then node.value
       when Nodes::StringLit
-        node.value.gsub(/\\\((\w+)\)/) { env.get($1).to_s }
+        node.value.gsub(/\\(\\|"|n|r|t|0|\((\w+)\))/) do
+          case $1
+          when '\\' then '\\'
+          when '"'  then '"'
+          when 'n'  then "\n"
+          when 'r'  then "\r"
+          when 't'  then "\t"
+          when '0'  then "\0"
+          else env.get($2).to_s
+          end
+        end
       when Nodes::BoolLit   then node.value
       when Nodes::NoneLit   then nil
       when Nodes::ListLit
