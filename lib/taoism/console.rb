@@ -55,7 +55,7 @@ module Taoism
 
       if parser.errors.empty?
         result = @evaluator.evaluate(ast)
-        puts render(result)
+        puts Runtime.repr(result)
       else
         parser.errors.each do |err|
           $stderr.puts "Error: #{err}"
@@ -63,17 +63,6 @@ module Taoism
       end
     rescue Runtime::Error, Runtime::Return, Runtime::Leave => err
       $stderr.puts "Error: #{err.message}"
-    end
-
-    def render(value)
-      case value
-      when nil    then 'None'
-      when true   then 'True'
-      when false  then 'False'
-      when String then %Q("#{value}")
-      when Array  then "[#{value.map { render(_1) }.join(', ')}]"
-      else value.to_s
-      end
     end
 
     def unclosed?(input)
