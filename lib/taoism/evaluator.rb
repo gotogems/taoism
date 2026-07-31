@@ -185,7 +185,7 @@ module Taoism
           call_env.define(fn.receiver.param_name, target, mutable: true)
 
           fn.params.each_with_index do |p, i|
-            call_env.define(p, args[i] || nil, mutable: true)
+            call_env.define(p, args[i], mutable: true)
           end
 
           begin
@@ -203,7 +203,7 @@ module Taoism
 
             call_env = Environment.new(callee.closure)
             callee.params.each_with_index do |p, i|
-              call_env.define(p, args[i] || nil, mutable: true)
+              call_env.define(p, args[i], mutable: true)
             end
 
             begin
