@@ -25,20 +25,23 @@ else
   ARGF.read
 end
 
-lexer = Taoism::Lexer.new(source)
-parser = Taoism::Parser.new(lexer)
+begin
+  lexer = Taoism::Lexer.new(source)
+  parser = Taoism::Parser.new(lexer)
 
-ast = parser.parse
+  ast = parser.parse
 
-if parser.errors.empty?
-  evaluator = Taoism::Evaluator.new
-  begin
+  if parser.errors.empty?
+    evaluator = Taoism::Evaluator.new
     evaluator.evaluate(ast)
-  rescue Runtime::Error => err
-    $stderr.puts "Error: #{err.message}"
+  else
+    parser.errors.each { |e| $stderr.puts e }
     exit 1
   end
-else
-  parser.errors.each { |e| $stderr.puts e }
+rescue Taoism::Runtime::Error => err
+  $stderr.puts "Error: #{err.message}"
+  exit 1
+rescue StandardError => err
+  $stderr.puts "Internal error: #{err.message}"
   exit 1
 end
