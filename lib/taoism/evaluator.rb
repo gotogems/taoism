@@ -51,25 +51,31 @@ module Taoism
       when Nodes::Assign
         val = evaluate(node.value, env)
 
-        if node.target.is_a?(Nodes::Identifier)
+        case node.target
+        when Nodes::Identifier
           env.set(node.target.name, val)
-        else
+        when Nodes::DotExpr
           target = evaluate(node.target.target, env)
-          case node.target
-          when Nodes::DotExpr
-            unless target.is_a?(Runtime::Instance)
-              raise Runtime::Error, "field access on non-instance"
-            end
 
-            target.fields[node.target.name] = val
-          when Nodes::Index
-            unless target.respond_to?(:[]=)
-              raise Runtime::Error, "index assignment on non-indexable"
-            end
-
-            target[evaluate(node.target.index, env)] = val
-          else
+          unless target.is_a?(Runtime::Instance)
+            raise Runtime::Error, "field access on non-instance"
           end
+
+          unless target.fields.key?(node.target.name)
+            raise Runtime::Error, "undefined field: #{node.target.name}"
+          end
+
+          target.fields[node.target.name] = val
+        when Nodes::Index
+          target = evaluate(node.target.target, env)
+
+          unless target.respond_to?(:[]=)
+            raise Runtime::Error, "index assignment on non-indexable"
+          end
+
+          target[evaluate(node.target.index, env)] = val
+        else
+          raise Runtime::Error, "invalid assignment target"
         end
 
         val
@@ -237,6 +243,10 @@ module Taoism
         target = evaluate(node.target, env)
 
         if target.is_a?(Runtime::Instance)
+          unless target.fields.key?(node.name)
+            raise Runtime::Error, "undefined field: #{node.name}"
+          end
+
           target.fields[node.name]
         else
           raise Runtime::Error, "field access on non-instance"
