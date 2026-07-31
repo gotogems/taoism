@@ -120,8 +120,10 @@ rule
     { result = Nodes::DataDef.new(val[1].lexeme, val[3],
         val[0].start, val[4].end) }
 
-  field_list : field                   { result = [val[0]] }
-             | field_list field        { val[0] << val[1]; result = val[0] }
+  field_list : /* none */             { result = [] }
+             | field                  { result = [val[0]] }
+             | field_list field       { val[0] << val[1]; result = val[0] }
+             | field_list COMMA field { val[0] << val[2]; result = val[0] }
 
   field : IDENTIFIER
     { result = Nodes::Field.new(val[0].lexeme, nil,
