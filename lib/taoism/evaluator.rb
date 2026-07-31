@@ -139,7 +139,13 @@ module Taoism
         )
 
         if node.receiver
-          fn_name = "#{node.receiver.type_name}.#{node.name}"
+          type_name = node.receiver.type_name
+
+          unless env.has?(type_name) && env.get(type_name).is_a?(Runtime::DataType)
+            raise Runtime::Error, "undefined type: #{type_name}"
+          end
+
+          fn_name = "#{type_name}.#{node.name}"
 
           if @methods[fn_name]
             raise Runtime::Error, "already defined method: #{fn_name}"

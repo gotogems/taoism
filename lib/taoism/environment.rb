@@ -36,5 +36,9 @@ module Taoism
         raise Runtime::Error, "undefined variable: #{name}"
       end
     end
+
+    def has?(name)
+      @scope.key?(name) or @outer&.has?(name)
+    end
   end
 end
