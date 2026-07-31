@@ -35,7 +35,7 @@ module Taoism
         line = Readline.readline(ps2, false)
 
         break unless line
-        input << line.chomp
+        input << "\n" << line.chomp
       end
 
       if had_continuation
