@@ -2,11 +2,17 @@
 require 'taoism'
 
 source = if $stdin.tty?
-  filepath, _ = ARGV.reject { _1.start_with?('-') }
+  files = ARGV.reject { _1.start_with?('-') }
 
-  if filepath.nil?
+  if files.empty?
     puts "Tao is a toy language."
     exit 0
+  end
+
+  filepath = files.first
+
+  if files[1]
+    $stderr.puts "skipped: #{files[1..].join(', ')}"
   end
 
   if File.exist?(filepath)
