@@ -105,7 +105,7 @@ rule
         val[0].start, val[5].end) }
           | FUN LPAREN IDENTIFIER IDENTIFIER RPAREN
                  IDENTIFIER LPAREN params RPAREN block
-    { result = Nodes::FunDef.new(val[5].lexeme, val[8], val[9],
+    { result = Nodes::FunDef.new(val[5].lexeme, val[7], val[9],
         Nodes::Receiver.new(val[2].lexeme, val[3].lexeme,
           val[1].start, val[4].end),
         val[0].start, val[9].end) }

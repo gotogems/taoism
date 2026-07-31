@@ -849,7 +849,7 @@ module_eval(<<'.,.,', 'parser.y', 103)
 
 module_eval(<<'.,.,', 'parser.y', 107)
   def _reduce_33(val, _values, result)
-     result = Nodes::FunDef.new(val[5].lexeme, val[8], val[9],
+     result = Nodes::FunDef.new(val[5].lexeme, val[7], val[9],
         Nodes::Receiver.new(val[2].lexeme, val[3].lexeme,
           val[1].start, val[4].end),
         val[0].start, val[9].end)
