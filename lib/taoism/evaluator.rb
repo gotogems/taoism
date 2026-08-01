@@ -45,6 +45,15 @@ module Taoism
         val
       when Nodes::LetPair
         values = evaluate(node.expr, env)
+
+        unless values.is_a?(Array)
+          raise Runtime::Error, "cannot destructure #{values}"
+        end
+
+        if values.length < 2
+          raise Runtime::Error, "cannot destructure #{values}, expected at least 2 elements"
+        end
+
         env.define(node.first, values[0], mutable: false)
         env.define(node.second, values[1], mutable: false)
         values
