@@ -125,15 +125,17 @@ module Taoism
       when Nodes::Switch
         val = evaluate(node.value, env)
         result = nil
+        matched = false
 
         node.arms.each do |arm|
           if evaluate(arm.pattern, env) == val
             result = evaluate(arm.value, env)
+            matched = true
             break
           end
         end
 
-        if result.nil? && node.else_body
+        if !matched && node.else_body
           result = evaluate(node.else_body, env)
         end
 
