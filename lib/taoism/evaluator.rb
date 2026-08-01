@@ -282,8 +282,16 @@ module Taoism
 
         target[index]
       when Nodes::DataDef
+        node.fields.each do |field|
+          next if field.default.nil?
+          unless literal?(field.default)
+            raise Runtime::Error, "field default must be a literal: #{field.name}"
+          end
+        end
+
         value = Runtime::DataType.new(node.name, node.fields)
         env.define(node.name, value, mutable: false)
+        value
       when Nodes::Try
         begin
           [nil, evaluate(node.call, env)]
@@ -298,6 +306,21 @@ module Taoism
 
     def arity_error(expected, got)
       "expected #{expected} argument(s) but got #{got}"
+    end
+
+    def literal?(node)
+      case node
+      when Nodes::IntLit,
+           Nodes::FloatLit,
+           Nodes::StringLit,
+           Nodes::BoolLit,
+           Nodes::NoneLit
+        true
+      when Nodes::ListLit
+        node.elements.all? { |el| literal?(el) }
+      else
+        false
+      end
     end
   end
 end
