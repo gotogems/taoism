@@ -32,7 +32,9 @@ module Taoism
           when 'r'  then "\r"
           when 't'  then "\t"
           when '0'  then "\0"
-          else env.get($2).to_s
+          else
+            value = env.get($2)
+            value.is_a?(String) ? value : Runtime.repr(value)
           end
         end
       when Nodes::BoolLit   then node.value
