@@ -73,7 +73,13 @@ module Taoism
             raise Runtime::Error, "index assignment on non-indexable"
           end
 
-          target[evaluate(node.target.index, env)] = val
+          index = evaluate(node.target.index, env)
+
+          unless index.is_a?(Integer)
+            raise Runtime::Error, "index must be an integer: #{index}"
+          end
+
+          target[index] = val
         else
           raise Runtime::Error, "invalid assignment target"
         end
@@ -277,6 +283,10 @@ module Taoism
       when Nodes::Index
         index = evaluate(node.index, env)
         target = evaluate(node.target, env)
+
+        unless index.is_a?(Integer)
+          raise Runtime::Error, "index must be an integer: #{index}"
+        end
 
         unless target.respond_to?(:[])
           raise Runtime::Error, "index access on non-indexable"
