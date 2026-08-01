@@ -201,7 +201,7 @@ module Taoism
           @methods[fn_name] = fn
         end
 
-        if node.name
+        if node.name && node.receiver.nil?
           env.define(node.name, fn, mutable: false)
         end
 
