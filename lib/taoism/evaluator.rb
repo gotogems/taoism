@@ -33,8 +33,9 @@ module Taoism
           when 't'  then "\t"
           when '0'  then "\0"
           else
-            value = env.get($2)
-            value.is_a?(String) ? value : Runtime.repr(value)
+            env.get($2).then { |v|
+              v.is_a?(String) ? v : Runtime.repr(v)
+            }
           end
         end
       when Nodes::BoolLit   then node.value
@@ -305,8 +306,8 @@ module Taoism
           raise Runtime::Error, "field access on non-instance"
         end
       when Nodes::Index
-        index = evaluate(node.index, env)
         target = evaluate(node.target, env)
+        index = evaluate(node.index, env)
 
         unless index.is_a?(Integer)
           raise Runtime::Error, "index must be an integer: #{index}"
