@@ -92,6 +92,18 @@ module Taoism
             raise Runtime::Error, "index must be an integer: #{index}"
           end
 
+          if target.is_a?(String)
+            unless val.is_a?(String)
+              raise Runtime::Error, "index value must be a string"
+            end
+
+            unless index.between?(-target.length, target.length)
+              raise Runtime::Error, "index out of range: #{index}"
+            end
+          elsif index < -target.length
+            raise Runtime::Error, "index out of range: #{index}"
+          end
+
           target[index] = val
         else
           raise Runtime::Error, "invalid assignment target"
