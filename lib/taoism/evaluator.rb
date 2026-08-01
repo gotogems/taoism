@@ -89,11 +89,32 @@ module Taoism
         when :and then left && evaluate(node.right, env)
         when :or  then left || evaluate(node.right, env)
         else
-          left.send(node.op, evaluate(node.right, env))
+          right = evaluate(node.right, env)
+
+          if %i(+ - * / % < <= > >=).include?(node.op)
+            unless Types.numeric?(left) && Types.numeric?(right)
+              raise Runtime::Error, "cannot apply #{node.op} to #{Types.typeof(left)} and #{Types.typeof(right)}"
+            end
+          end
+
+          if %i(/ %).include?(node.op) && right == 0
+            raise Runtime::Error, "cannot divide by zero"
+          end
+
+          left.send(node.op, right)
         end
       when Nodes::UnaryOp
         operand = evaluate(node.operand, env)
-        node.op == :'-' ? -operand : !operand
+
+        if node.op == :'-'
+          unless Types.numeric?(operand)
+            raise Runtime::Error, "cannot negate #{Types.typeof(operand)}"
+          end
+
+          -operand
+        else
+          !operand
+        end
       when Nodes::If
         if evaluate(node.cond, env)
           evaluate(node.then_body, env)
