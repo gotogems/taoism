@@ -79,7 +79,7 @@ module Taoism
         when Nodes::Index
           target = evaluate(node.target.target, env)
 
-          unless target.respond_to?(:[]=)
+          unless target.is_a?(Array) || target.is_a?(String)
             raise Runtime::Error, "index assignment on non-indexable"
           end
 
@@ -308,7 +308,7 @@ module Taoism
           raise Runtime::Error, "index must be an integer: #{index}"
         end
 
-        unless target.respond_to?(:[])
+        unless target.is_a?(Array) || target.is_a?(String)
           raise Runtime::Error, "index access on non-indexable"
         end
 
