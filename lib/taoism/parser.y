@@ -79,15 +79,15 @@ rule
         val[0].start, val[3].end) }
 
   import_stmt : IMPORT path
-    { result = Nodes::Import.new(val[1],
-        val[0].start, val[0].end) }
+    { result = Nodes::Import.new(val[1][0],
+        val[0].start, val[1][1]) }
 
   package_stmt : PACKAGE IDENTIFIER
     { result = Nodes::Package.new(val[1].lexeme,
         val[0].start, val[1].end) }
 
-  path : IDENTIFIER              { result = val[0].lexeme }
-       | path DOT IDENTIFIER     { result = val[0] + '.' + val[2].lexeme }
+  path : IDENTIFIER              { result = [val[0].lexeme, val[0].end] }
+       | path DOT IDENTIFIER     { result = [val[0][0] + '.' + val[2].lexeme, val[2].end] }
 
   return_stmt : RETURN expr
     { result = Nodes::Return.new(val[1],

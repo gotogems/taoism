@@ -788,8 +788,8 @@ module_eval(<<'.,.,', 'parser.y', 77)
 
 module_eval(<<'.,.,', 'parser.y', 81)
   def _reduce_25(val, _values, result)
-     result = Nodes::Import.new(val[1],
-        val[0].start, val[0].end)
+     result = Nodes::Import.new(val[1][0],
+        val[0].start, val[1][1])
     result
   end
 .,.,
@@ -804,14 +804,14 @@ module_eval(<<'.,.,', 'parser.y', 85)
 
 module_eval(<<'.,.,', 'parser.y', 88)
   def _reduce_27(val, _values, result)
-     result = val[0].lexeme
+     result = [val[0].lexeme, val[0].end]
     result
   end
 .,.,
 
 module_eval(<<'.,.,', 'parser.y', 89)
   def _reduce_28(val, _values, result)
-     result = val[0] + '.' + val[2].lexeme
+     result = [val[0][0] + '.' + val[2].lexeme, val[2].end]
     result
   end
 .,.,
