@@ -7,6 +7,7 @@ module Taoism
         'io.println' => proc { |arg| puts arg.to_s }
       }
       @in_loop = false
+      @in_function = false
     end
 
     def evaluate(node, env = @global)
@@ -238,10 +239,15 @@ module Taoism
             call_env.define(p, args[i], mutable: true)
           end
 
+          prev = @in_function
+          @in_function = true
+
           begin
             evaluate(fn.body, call_env)
           rescue Runtime::Return => ret
             ret.value
+          ensure
+            @in_function = prev
           end
         else
           callee = evaluate(node.callee, env)
@@ -256,10 +262,15 @@ module Taoism
               call_env.define(p, args[i], mutable: true)
             end
 
+            prev = @in_function
+            @in_function = true
+
             begin
               evaluate(callee.body, call_env)
             rescue Runtime::Return => ret
               ret.value
+            ensure
+              @in_function = prev
             end
           when Runtime::DataType
             fields = {}
@@ -314,11 +325,19 @@ module Taoism
         env.define(node.name, value, mutable: false)
         value
       when Nodes::Try
-        begin
-          [nil, evaluate(node.call, env)]
-        rescue Runtime::Error => err
-          [err.message, nil]
+        unless @in_function
+          raise Runtime::Error, "try outside function"
         end
+
+        result = evaluate(node.call, env)
+
+        unless result.is_a?(Array) && result.length == 2
+          raise Runtime::Error, "try requires [val, err] tuple"
+        end
+
+        val, err = result
+        return val if err.nil?
+        raise Runtime::Return.new(err)
       when Nodes::Package then nil
       when Nodes::Import  then nil
       when nil            then nil
