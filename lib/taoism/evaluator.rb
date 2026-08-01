@@ -160,15 +160,17 @@ module Taoism
         prev = @in_loop
         @in_loop = true
 
-        loop do
-          begin
-            evaluate(node.body, Environment.new(env))
-          rescue Runtime::Leave
-            break
+        begin
+          loop do
+            begin
+              evaluate(node.body, Environment.new(env))
+            rescue Runtime::Leave
+              break
+            end
           end
+        ensure
+          @in_loop = prev
         end
-
-        @in_loop = prev
       when Nodes::Leave
         unless @in_loop
           raise Runtime::Error, "leave outside loop"
