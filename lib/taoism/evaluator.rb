@@ -302,7 +302,9 @@ module Taoism
         end
       when Nodes::Package then nil
       when Nodes::Import  then nil
+      when nil            then nil
       else
+        raise Runtime::Error, "unknown node: #{node.class}"
       end
     end
 
