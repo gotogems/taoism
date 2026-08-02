@@ -1,11 +1,11 @@
 # Taoism
 
-Tao is a tiny, data-first language
+Tao is a tiny language implemented in Ruby
 
 ## Installation
 
 ```zsh
-gem install taoism # Install globally
+gem install taoism
 ```
 
 ## Usage
@@ -20,4 +20,4 @@ taoism # an IRB-like console
 
 ## License
 
-This gem is released under the [1-clause BSD License](https://opensource.org/license/bsd-1-clause)
+Taoism is released under the [1-clause BSD License](https://opensource.org/license/bsd-1-clause)

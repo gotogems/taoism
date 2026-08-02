@@ -11,6 +11,6 @@ Gem::Specification.new do |spec|
   spec.files    = Dir['lib/**/*.rb']
 
   spec.executables = %w[tao taoism]
-  spec.add_dependency 'racc', '~> 1.8.1'
   spec.required_ruby_version = '>= 3.0'
+  spec.add_dependency 'racc', '~> 1.8.1'
 end
