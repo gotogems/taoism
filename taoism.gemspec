@@ -5,12 +5,12 @@ Gem::Specification.new do |spec|
   spec.version  = Taoism::VERSION
   spec.licenses = ['BSD-1-Clause']
   spec.homepage = 'https://dub.sh/taoism'
-  spec.summary  = 'A toy language inspired by Tao'
+  spec.summary  = 'A tiny scripting language'
   spec.author   = 'oneureka'
   spec.email    = 'oneureka@github.io'
-  spec.files    = Dir['lib/**/*']
+  spec.files    = Dir['lib/**/*.rb']
 
-  spec.executable = 'taoism'
+  spec.executables = %w[tao taoism]
   spec.add_dependency 'racc', '~> 1.8.1'
   spec.required_ruby_version = '>= 3.0'
 end
