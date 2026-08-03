@@ -1,0 +1,92 @@
+---
+layout: "@layouts/DocsLayout.astro"
+title: Functions & Modules
+description: Functions, methods, and modules in Tao.
+active: functions
+---
+
+# Functions & Modules
+
+<p class="lead">
+  Functions are first-class values: they can be named, stored in variables,
+  and passed around. Arity is checked strictly.
+</p>
+
+## Named functions
+
+```kts
+fun add(a, b) {
+  return a + b
+}
+
+add(2, 3)    // 5
+```
+
+The body evaluates to its last statement, so `return` is often optional.
+
+```kts
+fun add(a, b) { a + b }
+```
+
+## Calling
+
+Calls require parentheses and exact arity: a two-parameter function must be
+called with exactly two arguments.
+
+```kts
+fun f(x) { 42 }
+f(0)     // ok
+f()      // error: expected 1 argument(s) but got 0
+f(1, 2)  // error: expected 1 argument(s) but got 2
+```
+
+## Anonymous functions
+
+`fun -> (params)` is a function literal. Anonymous functions close over their
+defining scope.
+
+```kts
+let helper = fun -> (x) { x * 2 }
+helper(21)   // 42
+```
+
+## Receiver methods
+
+A method is declared with a typed receiver and called on an instance. It is
+dispatched by the receiver's type, and the receiver is mutable in the body.
+
+```kts
+data Point {
+  x = 0
+}
+
+fun (p Point) add(v) { p.x + v }
+
+const P = Point(1)
+P.add(4)   // 5
+```
+
+The method name is not a global function: `add(4)` alone is an error. Two
+types may share a method name.
+
+## Built-ins
+
+`io.println` prints a value to standard output.
+
+```kts
+io.println("hello, world")
+```
+
+## `package` and `import`
+
+`package` names the file's package; `import` pulls in a dotted path. Both are
+parsed today and reserved for the standard modules.
+
+```kts
+package app
+
+import io
+import math.os
+```
+
+See [Modules (API)](/modules) for the standard module list.

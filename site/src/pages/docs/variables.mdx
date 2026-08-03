@@ -1,0 +1,97 @@
+---
+layout: "@layouts/DocsLayout.astro"
+title: Variables
+description: Variables, constants, and assignment in Tao.
+active: variables
+---
+
+import Callout from '@components/Callout.astro'
+
+# Variables
+
+<p class="lead">
+  Tao is intentionally strict about names: variables are immutable unless
+  declared mutable, and every name may be defined exactly once in its scope.
+</p>
+
+## `let`
+
+`let` declares an immutable binding.
+
+```kts
+let x = 42
+x = 10    // error: cannot assign to immutable variable
+```
+
+## `let mut`
+
+`let mut` declares a mutable binding that can be reassigned.
+
+```kts
+let mut x = 5
+x = 10    // ok
+```
+
+## `const`
+
+`const` declares a top-level constant. Like `let`, it is immutable.
+
+```kts
+const LIMIT = 100
+```
+
+## Destructuring
+
+`let a, b = expr` unpacks the first two elements of a list into two immutable
+variables. Extra elements are ignored.
+
+```kts
+let val, err = readFile("x")   // val = first, err = second
+```
+
+<Callout kind="warn">
+  The right-hand side must be a list with at least two elements, or the
+  program stops with a runtime error.
+</Callout>
+
+## Assignment
+
+The right of `=` may be an identifier, a field access, or an index. Assigning
+to anything else is an error.
+
+```kts
+x = 2          // variable
+p.y = 1        // field
+xs[0] = 42     // element
+```
+
+## Names are defined once
+
+Redefining a name in the same scope is an error, whether it is a variable, a
+function, or a type.
+
+```kts
+let x = 1
+let x = 2    // error: already defined variable: x
+```
+
+## Scopes
+
+Each block opens a new scope. Inner blocks can read outer variables, and
+closures capture the scope where they were created.
+
+```kts
+fun f() {
+  let mut n = 0
+  let c = fun -> () { n = n + 1; n }
+  c()
+  c()      // 2
+}
+f()
+```
+
+<Callout>
+  Because bindings are immutable unless declared `mut`, a closure can only
+  update state captured as `let mut`.
+</Callout>
+

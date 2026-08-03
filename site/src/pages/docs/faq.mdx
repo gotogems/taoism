@@ -1,0 +1,88 @@
+---
+layout: "@layouts/DocsLayout.astro"
+title: FAQ
+description: Frequently asked questions about Tao.
+active: faq
+---
+
+# FAQ
+
+<p class="lead">
+  Common questions about Tao, answered from the actual implementation.
+</p>
+
+## Does Tao have classes and inheritance?
+
+No. A `data` type declares fields, but there is no inheritance. To extend a
+type, write a receiver method:
+
+```kts
+fun (p Point) area() { p.x * p.y }
+```
+
+Two types may define a method of the same name; each is dispatched by the
+receiver's type.
+
+## Why are `0`, `""`, and `[]` true?
+
+Tao follows its own truthiness law: only `None` and `False` are false. Every
+other value — including `0`, `""`, and `[]` — is true. This matches Ruby.
+
+## How do I concatenate strings?
+
+`"a" + "b"` is an error. Use interpolation instead:
+
+```kts
+let name = "world"
+"hello \(name)"
+```
+
+Interpolation accepts a simple identifier, not an arbitrary expression.
+
+## How do I handle errors?
+
+Functions that can fail return a `[val, err]` list. Unpack it by hand with
+`let val, err = expr`, or let `try expr` return the error from the current
+function. There are no exceptions and no `raise`.
+
+## Is there a map or dictionary type?
+
+No. Tao's only collection is the `List`, and its only built-in values are
+`Int`, `Float`, `Bool`, `None`, `String`, and `List`. A `data` type is the
+way to group values.
+
+## Is there concurrency?
+
+No. Programs run on a single thread, and there are no fibers, threads, or
+actors.
+
+## Why can't I call a method like a function?
+
+A receiver method is dispatched on its instance, not bound as a global name.
+`add(4)` alone fails with an undefined variable; `p.add(4)` works.
+
+## Can `leave` be used outside a loop? Can `try` be used outside a function?
+
+No to both. `leave` is only valid inside a `loop`, and `try` only inside a
+function. Both are checked at parse time.
+
+## Can I redefine a name?
+
+No. Every name — variable, function, or type — may be defined exactly once in
+its scope. Redefining reports `already defined variable: x`.
+
+## Can a `data` field default to an expression?
+
+No. Field defaults are evaluated at construction and must be literals
+(`Int`, `Float`, `String`, `Bool`, `None`, or a list of those). An identifier
+or call is rejected.
+
+## How is Tao related to Ruby?
+
+Tao is implemented in Ruby and shares some ideas — truthiness, string
+interpolation — but it is a separate language with its own syntax and rules.
+
+## Where do `package` and `import` fit in?
+
+Both are parsed today and reserved for the standard modules, which are not
+implemented yet. Only the `io.println` built-in is available directly.

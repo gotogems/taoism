@@ -1,0 +1,105 @@
+---
+layout: "@layouts/DocsLayout.astro"
+title: Control Flow & Errors
+description: Control flow and errors as values in Tao.
+active: control-flow
+---
+
+import Callout from '@components/Callout.astro'
+
+# Control Flow & Errors
+
+<p class="lead">
+  Tao has one `if`, one `switch`, one `loop`, one `leave` — and it reports
+  errors by value, not by exception.
+</p>
+
+## `if`
+
+`if` is an expression. Parentheses around the condition are optional, and
+`else if` chains naturally. Without an `else`, a false condition yields
+`None`.
+
+```kts
+if x { 1 } else { 2 }
+
+if False { 1 } else if True { 3 } else { 2 }   // 3
+```
+
+## `switch`
+
+`switch` is an expression. Arms match the value with `==`; the optional
+`else` arm catches everything else. Without a match, the result is `None`.
+
+```kts
+switch n {
+  1 => 100
+  2 => 200
+  else => -1
+}
+```
+
+## `loop` and `leave`
+
+`loop` repeats forever. `leave` exits the innermost loop; using it outside a
+loop is an error.
+
+```kts
+let mut i = 0
+loop {
+  if i == 3 { leave }
+  i = i + 1
+}
+```
+
+## `return`
+
+`return expr` returns from the enclosing function. Without an explicit
+return, a function's body evaluates to its last statement.
+
+```kts
+fun sign(n) {
+  if n < 0 { return -1 }
+  if n > 0 { return 1 }
+  0
+}
+```
+
+## Errors as values
+
+Functions that can fail return a `[val, err]` list: the value, and an error
+that is `None` on success.
+
+```kts
+fun readFile(path) {
+  if path == "" { return [None, "empty path"] }
+  return ["content", None]
+}
+```
+
+### `let a, b = ...`
+
+Unpack the pair by hand:
+
+```kts
+let val, err = readFile("x")
+if err != None { "failed" } else { val }
+```
+
+### `try`
+
+`try expr` unwraps a `[val, err]` pair: it yields the value when `err` is
+`None`, otherwise it returns the error from the current function.
+
+```kts
+fun process() {
+  let content = try readFile("")
+  content
+}
+```
+
+<Callout kind="warn">
+  `try` may only appear inside a function, and the wrapped expression must
+  evaluate to a two-element list.
+</Callout>
+

@@ -1,0 +1,152 @@
+---
+layout: "@layouts/DocsLayout.astro"
+title: Values
+description: The built-in values of Tao.
+active: values
+---
+
+import Callout from '@components/Callout.astro'
+
+# Values
+
+<p class="lead">
+  Tao has six kinds of built-in values: `Int`, `Float`, `Bool`, `None`,
+  `String`, and `List`. Everything else is a `data` instance you define yourself.
+</p>
+
+## Int
+
+Whole numbers. Underscores may separate digits for readability.
+
+```kts
+42
+1_000_000
+```
+
+## Float
+
+Numbers with a fractional part.
+
+```kts
+3.14
+0.5
+```
+
+## Bool
+
+The two boolean literals, written capitalized.
+
+```kts
+True
+False
+```
+
+## None
+
+The absence of a value. Like Ruby's `nil`, it is used for "no result" and as
+the empty half of an error.
+
+## String
+
+Double-quoted text. Strings support the escapes `\\`, `\"`, `\n`, `\r`,
+`\t`, and `\0`, and cannot span multiple lines.
+
+```kts
+"hello"
+"hello\nworld"
+```
+
+String interpolation uses a backslash-paren around an identifier:
+
+```kts
+let name = "world"
+"hello \(name)"
+```
+
+<Callout>
+  Interpolation accepts a simple identifier, not an arbitrary expression.
+  Non-string values are rendered with `repr`.
+</Callout>
+
+Strings are also indexable for reading and writing. An index returns a
+one-character string, and negative indexes count from the end.
+
+```kts
+"hello"[0]     // "h"
+"hello"[-1]    // "o"
+let mut s = "ab"
+s[0] = "A"     // "Ab"
+```
+
+## List
+
+An ordered collection, written with square brackets.
+
+```kts
+[1, 2, 3]
+[]
+["mixed", 1, True, None]
+```
+
+Elements are read and written with an index. Indexes must be integers;
+negative indexes count from the end, so `[-1]` is the last element.
+
+```kts
+[1, 2, 3][0]    // 1
+[1, 2, 3][-1]   // 3
+let mut xs = [1, 2]
+xs[0] = 99      // [99, 2]
+```
+
+## Truthiness
+
+Tao follows its own law: only `None` and `False` are false. Every other value
+— including `0`, `""`, and `[]` — is true.
+
+```kts
+if 0 { "T" } else { "F" }   // "T"
+if "" { "T" } else { "F" }  // "T"
+if [] { "T" } else { "F" }  // "T"
+if None { "T" } else { "F" }  // "F"
+```
+
+## Operators
+
+### Arithmetic
+
+`+`, `-`, `*`, `/`, `%` require numbers on both sides. Unary `-` negates a
+number. Division or modulo by zero is a runtime error.
+
+Dividing two `Int` values yields an `Int`; use a `Float` operand for a
+fractional result.
+
+```kts
+1 + 2 * 3    // 7
+7 % 3        // 1
+7 / 2        // 3
+7 / 2.0      // 3.5
+-5
+```
+
+<Callout kind="warn">
+  `"a" + "b"` is an error — strings are not concatenated with `+`.
+</Callout>
+
+### Comparison
+
+Ordering (`>` `>=` `<` `<=`) requires numbers. Equality (`==`, `!=`) works on
+any values.
+
+### Logical
+
+`and` / `or` (also `&&` / `||`) short-circuit and _return one of their
+operands_, like Ruby:
+
+```kts
+None or 42     // 42
+0 or 5         // 0
+1 and 2        // 2
+None and 42    // None
+```
+
+`!` and `not` negate truthiness.

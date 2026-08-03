@@ -1,0 +1,120 @@
+---
+layout: "@layouts/DocsLayout.astro"
+title: Syntax
+description: The syntax of Tao.
+active: syntax
+---
+
+import Callout from '@components/Callout.astro'
+
+# Syntax
+
+<p class="lead">
+  Tao's grammar is small and regular. Semicolons and parentheses are mostly
+  optional; newlines are ordinary whitespace.
+</p>
+
+## Comments
+
+Line comments start with `//` and run to the end of the line.
+
+```kts
+// this is a comment
+let x = 1
+```
+
+## Structure of a program
+
+A program is a sequence of top-level statements: `const`, `fun`, `data`,
+`import`, `package`, or an expression.
+
+Inside a function body, the block holds `let`, assignment, `return`, `leave`,
+`loop`, or an expression.
+
+```kts
+package app
+
+import a.b.c
+
+const LIMIT = 100
+
+data Point {
+  x = 0
+  y = 0
+}
+
+fun add(a, b) {
+  return a + b
+}
+
+add(2, 3)
+```
+
+## Semicolons
+
+Semicolons after statements are optional. Both of these are valid and
+equivalent:
+
+```kts
+fun f(x) { let a = 1; a + 1 }; f(0)
+```
+
+```kts
+fun f(x) {
+  let a = 1
+  a + 1
+}
+f(0)
+```
+
+## Keywords
+
+Tao has exactly seventeen keywords:
+
+```kts
+if    else   loop   leave  switch
+package  import  const  data   fun
+let    mut    try    return and    or
+not
+```
+
+<Callout>
+  The boolean literals are `True` and `False`, and the null literal is `None`.
+  These are values, not keywords.
+</Callout>
+
+## Identifiers
+
+Identifiers start with a letter or underscore, then any letters, digits, or
+underscores. Built-in names are capitalized (`True`, `False`, `None`).
+
+## Operators
+
+Operators are grouped by precedence, from tightest to loosest. Higher rows
+bind tighter.
+
+| Operators | Meaning |
+| --- | --- |
+| `.` `[]` `()` | member access, indexing, call |
+| `-` (unary) | negation |
+| `*` `/` `%` | multiplication, division, modulo |
+| `+` `-` | addition, subtraction |
+| `>` `>=` `<` `<=` | ordering |
+| `==` `!=` | equality |
+| `and` `&&` | logical and |
+| `or` `\|\|` | logical or |
+
+`!` and `not` are unary logical negation, binding as tightly as unary minus.
+
+## Flexible condition syntax
+
+The parentheses around `if` and `switch` conditions are optional:
+
+```kts
+if x { 1 }
+```
+
+```kts
+if (x) { 1 }
+```
+

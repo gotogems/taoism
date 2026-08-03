@@ -1,0 +1,104 @@
+---
+layout: "@layouts/DocsLayout.astro"
+title: Data Types
+description: Defining and using data types in Tao.
+active: data
+---
+
+import Callout from '@components/Callout.astro'
+
+# Data Types
+
+<p class="lead">
+  `data` declares a new type. Building a value and calling a function are
+  syntactically indistinguishable — a type name is just a callable value.
+</p>
+
+## Defining a type
+
+```kts
+data Point {
+  x = 0
+  y = 0
+}
+```
+
+Fields are listed inside the braces. A field may have a default value; fields
+without a default are `None` unless given an argument.
+
+## Default values must be literals
+
+Field defaults are evaluated at _construction_, not definition, and must be
+literal values — `Int`, `Float`, `String`, `Bool`, `None`, or a list of
+those. An identifier or call is rejected.
+
+```kts
+data P { xs = [1, "a", 2.5] }   // ok
+data Q { x = base }              // error: default must be a literal
+```
+
+## Construction
+
+Call the type name with arguments to build an instance. Arguments fill fields
+positionally; the remaining fields use their defaults.
+
+```kts
+data Point {
+  x = 0
+  y = 0
+}
+
+const A = Point(1, 2)   // x=1, y=2
+const B = Point(1)      // x=1, y=0
+const C = Point()       // x=0, y=0
+```
+
+<Callout kind="warn">
+  Passing more arguments than there are fields is a runtime error.
+</Callout>
+
+## Field access
+
+Read and write fields with the dot operator. Writing an unknown field is an
+error.
+
+```kts
+const P = Point(1, 2)
+P.x        // 1
+P.x = 5    // field x is now 5
+```
+
+## Methods
+
+A receiver method is declared with a typed receiver. It is dispatched on the
+instance, not bound as a global name, and the receiver is mutable inside the
+body.
+
+```kts
+data Point {
+  x = 0
+}
+
+fun (p Point) add(v) { p.x + v }
+
+const P = Point(1)
+P.add(4)   // 5
+```
+
+Two types may define a method of the same name; each is dispatched by the
+receiver's type.
+
+<Callout>
+  A method name is _not_ a global function: `add(4)` would fail with an
+  undefined variable.
+</Callout>
+
+## Names must be unique
+
+A type name lives in the same namespace as functions and constants.
+Redefining, or naming a type after a function, is an error.
+
+```kts
+data P { x }
+fun P() { 1 }   // error: already defined variable: P
+```
