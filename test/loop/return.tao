@@ -1,0 +1,13 @@
+const i = 1
+
+fun f() {
+  loop {
+    if (i > 0) {
+      return i
+    }
+  }
+
+  return -1
+}
+
+io.println(f())

@@ -1,0 +1,12 @@
+const a = "a"
+
+fun f() {
+  let a = "f.a"
+  let mut b = "f.b"
+
+  b = a
+  io.println(a)
+  io.println(b)
+}
+
+f()

@@ -1,0 +1,15 @@
+io.println(True == None)   // False
+io.println(True == True)   // True
+io.println(True == False)  // False
+io.println(False == False) // True
+
+io.println(True != None)   // True
+io.println(True != True)   // False
+io.println(True != False)  // True
+io.println(False != False) // False
+
+io.println(None == "None")   // False
+io.println(True == "True")   // False
+io.println(False == "False") // False
+io.println(False == None)    // False
+io.println(False == 0)       // False

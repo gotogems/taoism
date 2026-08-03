@@ -1,0 +1,6 @@
+data Object {}
+
+// Object()() // not callable
+// None()
+
+io.println(Object())

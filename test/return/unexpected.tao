@@ -1,0 +1,3 @@
+// return // unexpected token
+
+fun f() { return }

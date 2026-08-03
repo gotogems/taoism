@@ -1,0 +1,9 @@
+io.println(!True)  // False
+io.println(!!True) // True
+io.println(!False) // True
+io.println(!None)  // True
+
+if (not False) {
+  io.println(not True)   // False
+  io.println(not !False) // False
+}

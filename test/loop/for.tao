@@ -1,0 +1,13 @@
+const i = 1
+
+fun for() {
+  let mut i = 0
+
+  loop {
+    if i > 5 { leave }
+    io.println(i)
+    i = i + 1
+  }
+}
+
+for()

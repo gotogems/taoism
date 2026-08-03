@@ -1,0 +1,12 @@
+// fun break() { leave }; break() // leave outside loop
+
+// leave // unexpected token
+
+fun once() {
+  loop {
+    io.println("once")
+    leave
+  }
+}
+
+once()
