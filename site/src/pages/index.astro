@@ -1,17 +1,26 @@
 ---
-
+import BaseLayout from '@layouts/BaseLayout.astro'
+import { home } from '../i18n'
+import Hero from '@components/Hero.astro'
+import Features from '@components/Features.astro'
+import Quickstart from '@components/Quickstart.astro'
+import Philosophy from '@components/Philosophy.astro'
+const t = home
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout
+  title={t.title}
+  lang="zh"
+  links={[
+    { href: '/docs/getting-started', label: t.nav.gettingStarted },
+    { href: '/docs', label: t.nav.docs },
+  ]}
+  footer={t.footer.license}
+>
+  <main>
+    <Hero />
+    <Features />
+    <Quickstart />
+    <Philosophy />
+  </main>
+</BaseLayout>

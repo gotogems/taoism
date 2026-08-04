@@ -1,0 +1,21 @@
+---
+import { home } from '../i18n'
+const t = home
+---
+
+<section class="mx-auto max-w-5xl px-6 py-16">
+  <p class="eyebrow">Features</p>
+  <h2 class="mt-2 font-serif text-3xl font-extralight tracking-tight">{t.features.title}</h2>
+  <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    {t.features.items.map((f) => (
+      <a
+        href={f.href}
+        class="group fx-noise rounded-xl border border-base-300 bg-base-100 p-6 transition-colors hover:border-primary hover:bg-base-200/40"
+      >
+        <h3 class="font-semibold">{f.title}</h3>
+        <p class="mt-2 font-serif text-sm leading-relaxed text-base-content/70">{f.quote}</p>
+        <p class="mt-2 text-sm leading-relaxed text-base-content/50">{f.desc}</p>
+      </a>
+    ))}
+  </div>
+</section>

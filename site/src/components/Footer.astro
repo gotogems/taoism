@@ -1,0 +1,11 @@
+---
+interface Props {
+  text: string
+}
+
+const { text } = Astro.props
+---
+
+<footer class="footer footer-center border-t border-base-300 bg-base-100 p-8 text-base-content/50">
+  <p>{text}</p>
+</footer>

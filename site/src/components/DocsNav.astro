@@ -1,0 +1,107 @@
+---
+export type DocKey =
+  | 'getting-started'
+  | 'docs'
+  | 'syntax'
+  | 'values'
+  | 'data'
+  | 'variables'
+  | 'control-flow'
+  | 'functions'
+  | 'modules'
+  | 'faq'
+
+export interface DocLink {
+  href: string
+  key: DocKey
+  label: string
+}
+
+export const docGroups: { title: string; items: DocLink[] }[] = [
+  {
+    title: 'Learn',
+    items: [{ href: '/docs/getting-started', key: 'getting-started', label: 'Getting Started' }],
+  },
+  {
+    title: 'Language Guide',
+    items: [
+      { href: '/docs/syntax', key: 'syntax', label: 'Syntax' },
+      { href: '/docs/values', key: 'values', label: 'Values' },
+      { href: '/docs/data', key: 'data', label: 'Data Types' },
+      { href: '/docs/variables', key: 'variables', label: 'Variables' },
+      { href: '/docs/control-flow', key: 'control-flow', label: 'Control Flow & Errors' },
+      { href: '/docs/functions', key: 'functions', label: 'Functions & Modules' },
+    ],
+  },
+  {
+    title: 'Reference',
+    items: [
+      { href: '/modules', key: 'modules', label: 'Modules (API)' },
+      { href: '/docs/faq', key: 'faq', label: 'FAQ' },
+    ],
+  },
+]
+
+export const docOrder: DocLink[] = [
+  { href: '/docs/getting-started', key: 'getting-started', label: 'Getting Started' },
+  { href: '/docs/syntax', key: 'syntax', label: 'Syntax' },
+  { href: '/docs/values', key: 'values', label: 'Values' },
+  { href: '/docs/data', key: 'data', label: 'Data Types' },
+  { href: '/docs/variables', key: 'variables', label: 'Variables' },
+  { href: '/docs/control-flow', key: 'control-flow', label: 'Control Flow & Errors' },
+  { href: '/docs/functions', key: 'functions', label: 'Functions & Modules' },
+]
+
+interface Props {
+  active: DocKey
+}
+
+const { active } = Astro.props
+---
+
+<aside class="md:w-56 md:shrink-0">
+  <details class="group md:hidden">
+    <summary
+      class="flex cursor-pointer list-none items-center justify-between rounded-box border border-base-300 bg-base-200/60 px-3 py-2 font-medium [&::-webkit-details-marker]:hidden"
+    >
+      <span class="text-sm">Contents</span>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-4 w-4 transition-transform group-open:rotate-180"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+      </svg>
+    </summary>
+    <ul class="menu menu-sm mt-2 gap-1 p-2">
+      {docGroups.map((g) => (
+        <>
+          <li class="menu-title text-xs">{g.title}</li>
+          {g.items.map((l) => (
+            <li>
+              <a href={l.href} class:list={[active === l.key && 'menu-active']}>
+                {l.label}
+              </a>
+            </li>
+          ))}
+        </>
+      ))}
+    </ul>
+  </details>
+  <ul class="menu menu-sm hidden gap-1 rounded-box bg-base-200/60 p-2 md:block">
+    {docGroups.map((g) => (
+      <>
+        <li class="menu-title text-xs">{g.title}</li>
+        {g.items.map((l) => (
+          <li>
+            <a href={l.href} class:list={[active === l.key && 'menu-active']}>
+              {l.label}
+            </a>
+          </li>
+        ))}
+      </>
+    ))}
+  </ul>
+</aside>

@@ -1,0 +1,57 @@
+---
+layout: "@layouts/DocsLayout.astro"
+title: Getting Started
+description: Install Taoism, run a script, and open the console.
+active: getting-started
+---
+
+import Callout from '@components/Callout.astro'
+
+# Getting Started
+
+<p class="lead">
+  Tao is a tiny language implemented in Ruby. Three commands are all you need.
+</p>
+
+## Install the gem
+
+Taoism is distributed as a Ruby gem and has no dependencies beyond Ruby itself.
+
+```zsh
+gem install taoism
+```
+
+## Run a script
+
+Write a `.tao` file and run it with `tao`:
+
+```kts
+fun main() {
+  io.println("hello, world")
+}
+
+main()
+```
+
+```zsh
+tao hello.tao
+```
+
+## Open the console
+
+`taoism` starts an IRB-like interactive console for trying snippets.
+
+```zsh
+taoism
+```
+
+<Callout>
+  Running `tao` with no arguments prints a friendly note and exits. Missing
+  files and runtime errors are reported on standard error.
+</Callout>
+
+## Next steps
+
+Once you have somewhere to explore, it's time to learn the language: start
+with the [syntax](/docs/syntax) guide, or jump straight into
+[data types](/docs/data).

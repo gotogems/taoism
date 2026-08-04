@@ -1,0 +1,46 @@
+---
+import '../styles/global.css'
+import Navbar from '@components/Navbar.astro'
+import Footer from '@components/Footer.astro'
+import serif116 from '@fontsource-variable/noto-serif-sc/files/noto-serif-sc-116-wght-normal.woff2'
+import serif117 from '@fontsource-variable/noto-serif-sc/files/noto-serif-sc-117-wght-normal.woff2'
+import serif118 from '@fontsource-variable/noto-serif-sc/files/noto-serif-sc-118-wght-normal.woff2'
+import serif119 from '@fontsource-variable/noto-serif-sc/files/noto-serif-sc-119-wght-normal.woff2'
+
+interface Props {
+  title: string
+  description?: string
+  lang: 'zh' | 'en'
+  links: { href: string; label: string }[]
+  active?: string
+  footer: string
+}
+
+const { title, description, lang, links, active, footer } = Astro.props
+---
+
+<!doctype html>
+<html lang={lang} data-theme="silk">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <title>{title}</title>
+    {description && <meta name="description" content={description} />}
+    {lang === 'zh' && (
+      <>
+        <link rel="preload" as="font" type="font/woff2" crossorigin href={serif116} />
+        <link rel="preload" as="font" type="font/woff2" crossorigin href={serif117} />
+        <link rel="preload" as="font" type="font/woff2" crossorigin href={serif118} />
+        <link rel="preload" as="font" type="font/woff2" crossorigin href={serif119} />
+      </>
+    )}
+  </head>
+  <body class="bg-base-100 text-base-content antialiased">
+    <Navbar links={links} active={active} />
+    <slot />
+    <Footer text={footer} />
+  </body>
+</html>

@@ -1,0 +1,85 @@
+---
+import BaseLayout from './BaseLayout.astro'
+import DocsNav, { type DocKey, docOrder } from '@components/DocsNav.astro'
+
+interface Props {
+  title?: string
+  description?: string
+  active?: DocKey
+  frontmatter?: { title?: string; description?: string; active?: DocKey }
+}
+
+const { title, description, active, frontmatter } = Astro.props
+const fm = frontmatter ?? {}
+const pageTitle = title ?? fm.title
+const pageActive = (active ?? fm.active ?? 'docs') as DocKey
+const pageDescription = description ?? fm.description
+
+const idx = docOrder.findIndex((d) => d.key === pageActive)
+const prev = idx > 0 ? docOrder[idx - 1] : undefined
+const next = idx >= 0 && idx < docOrder.length - 1 ? docOrder[idx + 1] : undefined
+
+const navLinks = [
+  { href: '/docs/getting-started', label: 'Getting Started' },
+  { href: '/modules', label: 'Modules' },
+  { href: '/docs', label: 'Docs' },
+]
+
+const activeHref =
+  pageActive === 'getting-started' ? '/docs/getting-started'
+  : pageActive === 'modules' ? '/modules'
+  : '/docs'
+---
+
+<BaseLayout
+  title={pageTitle ? `${pageTitle} – Tao` : 'Tao'}
+  description={pageDescription}
+  lang="en"
+  links={navLinks}
+  active={activeHref}
+  footer="Taoism is released under the 1-clause BSD License."
+>
+  <div class="mx-auto flex max-w-6xl flex-col gap-8 px-6 py-12 md:flex-row md:gap-10">
+    <DocsNav active={pageActive} />
+    <main class="prose min-w-0 flex-1">
+      <slot />
+      {prev || next ? (
+        <nav class="mt-14 flex items-center justify-between gap-4 border-t border-base-300 pt-6">
+          {prev ? (
+            <a href={prev.href} class="group flex flex-col">
+              <span class="text-xs text-base-content/50">← Previous</span>
+              <span class="font-medium group-hover:underline">{prev.label}</span>
+            </a>
+          ) : (
+            <span />
+          )}
+          {next ? (
+            <a href={next.href} class="group flex flex-col text-right">
+              <span class="text-xs text-base-content/50">Next →</span>
+              <span class="font-medium group-hover:underline">{next.label}</span>
+            </a>
+          ) : (
+            <span />
+          )}
+        </nav>
+      ) : null}
+    </main>
+  </div>
+</BaseLayout>
+
+<script is:inline>
+  const slugify = (text: string) =>
+    text
+      .toLowerCase()
+      .replace(/[^\w\s-]/g, '')
+      .replace(/\s+/g, '-')
+  for (const h of document.querySelectorAll<HTMLElement>('.prose h2, .prose h3')) {
+    if (!h.id) h.id = slugify(h.textContent || '')
+    const a = document.createElement('a')
+    a.className = 'anchor'
+    a.href = '#' + h.id
+    a.textContent = '#'
+    a.setAttribute('aria-hidden', 'true')
+    h.appendChild(a)
+  }
+</script>

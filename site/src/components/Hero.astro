@@ -1,0 +1,19 @@
+---
+import { home } from '../i18n'
+const t = home
+---
+
+<section class="hero relative overflow-hidden">
+  <span aria-hidden="true" class="pointer-events-none absolute inset-0 flex select-none items-center justify-center overflow-hidden">
+    <span class="-rotate-12 font-serif text-[18rem] leading-none text-base-content/5">道</span>
+  </span>
+  <div class="hero-content relative mx-auto flex-col gap-0 max-w-3xl px-6 py-28 text-center sm:py-36">
+    <p class="font-mono text-xs uppercase tracking-widest text-base-content/50">A Tiny Language · 17 Keywords</p>
+    <h1 class="mt-6 font-serif text-5xl font-extralight tracking-tight sm:text-7xl">{t.hero.title}</h1>
+    <p class="mx-auto mt-6 max-w-xl text-lg text-base-content/70">{t.hero.subtitle}</p>
+    <div class="mt-10 flex flex-wrap justify-center gap-3">
+      <a href="/docs/getting-started" class="btn btn-primary btn-lg">{t.nav.gettingStarted}</a>
+      <a href="/docs" class="btn btn-outline btn-lg">{t.nav.docs}</a>
+    </div>
+  </div>
+</section>

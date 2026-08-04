@@ -1,0 +1,79 @@
+---
+import DocsLayout from '@layouts/DocsLayout.astro'
+import { Code } from 'astro/components'
+import Callout from '@components/Callout.astro'
+---
+
+<DocsLayout title="Modules (API)" description="The standard modules of Tao." active="modules">
+  <h1>Modules (API)</h1>
+  <p class="lead">
+    The standard modules are not yet implemented. Today only the
+    <code>io.println</code> built-in is available directly.
+  </p>
+
+  <h2>Standard modules</h2>
+
+  <div class="not-prose mt-6 grid gap-6 sm:grid-cols-3">
+    <article class="card rounded-xl border border-base-300 bg-base-100 transition-colors hover:border-primary hover:bg-base-200/40">
+      <div class="card-body">
+        <h3 class="card-title">
+          io
+          <span class="inline-flex items-center gap-1.5 text-xs text-base-content/50">
+            <span class="status status-info status-sm"></span>
+            Planned
+          </span>
+        </h3>
+        <p class="text-sm leading-relaxed text-base-content/60">
+          Input and output. <code>io.println(value)</code> prints a value.
+        </p>
+      </div>
+    </article>
+    <article class="card rounded-xl border border-base-300 bg-base-100 transition-colors hover:border-primary hover:bg-base-200/40">
+      <div class="card-body">
+        <h3 class="card-title">
+          math
+          <span class="inline-flex items-center gap-1.5 text-xs text-base-content/50">
+            <span class="status status-info status-sm"></span>
+            Planned
+          </span>
+        </h3>
+        <p class="text-sm leading-relaxed text-base-content/60">
+          Mathematical functions and constants.
+        </p>
+      </div>
+    </article>
+    <article class="card rounded-xl border border-base-300 bg-base-100 transition-colors hover:border-primary hover:bg-base-200/40">
+      <div class="card-body">
+        <h3 class="card-title">
+          os
+          <span class="inline-flex items-center gap-1.5 text-xs text-base-content/50">
+            <span class="status status-info status-sm"></span>
+            Planned
+          </span>
+        </h3>
+        <p class="text-sm leading-relaxed text-base-content/60">
+          Operating-system facilities.
+        </p>
+      </div>
+    </article>
+  </div>
+
+  <Callout>
+    <code>io.println</code> is the one built-in available today; the rest of
+    <code>io</code> is planned.
+  </Callout>
+
+  <h2>Using modules</h2>
+  <p>
+    Modules are pulled in with <code>import</code>. The statement is parsed
+    today; loading will arrive with the modules themselves.
+  </p>
+  <Code
+    code={`import io
+import math`}
+    lang="kts"
+    themes={{ light: 'min-light' }}
+    defaultColor={false}
+    class="overflow-x-auto p-5 text-sm leading-relaxed"
+  />
+</DocsLayout>
