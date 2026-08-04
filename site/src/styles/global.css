@@ -111,4 +111,9 @@
     vertical-align: middle;
     border: var(--border) solid color-mix(in srgb, var(--color-base-content) 20%, #0000);
   }
+
+  .menu {
+    --menu-active-bg: var(--color-primary);
+    --menu-active-fg: var(--color-primary-content);
+  }
 }

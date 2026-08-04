@@ -39,7 +39,7 @@ const activeHref =
   active={activeHref}
   footer="Taoism is released under the 1-clause BSD License."
 >
-  <div class="mx-auto flex max-w-6xl flex-col gap-8 px-6 py-12 md:flex-row md:gap-10">
+  <div class="mx-auto flex max-w-5xl flex-col gap-8 px-6 py-12 md:flex-row md:gap-10">
     <DocsNav active={pageActive} />
     <main class="prose min-w-0 flex-1">
       <slot />
@@ -68,12 +68,12 @@ const activeHref =
 </BaseLayout>
 
 <script is:inline>
-  const slugify = (text: string) =>
+  const slugify = (text) =>
     text
       .toLowerCase()
       .replace(/[^\w\s-]/g, '')
       .replace(/\s+/g, '-')
-  for (const h of document.querySelectorAll<HTMLElement>('.prose h2, .prose h3')) {
+  for (const h of document.querySelectorAll('.prose h2, .prose h3')) {
     if (!h.id) h.id = slugify(h.textContent || '')
     const a = document.createElement('a')
     a.className = 'anchor'

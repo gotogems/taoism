@@ -59,7 +59,7 @@ interface Props {
 const { active } = Astro.props
 ---
 
-<aside class="md:w-56 md:shrink-0">
+<aside class="md:w-56 md:shrink-0 md:self-start md:sticky md:top-16">
   <details class="group md:hidden">
     <summary
       class="flex cursor-pointer list-none items-center justify-between rounded-box border border-base-300 bg-base-200/60 px-3 py-2 font-medium [&::-webkit-details-marker]:hidden"
@@ -75,7 +75,7 @@ const { active } = Astro.props
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
       </svg>
     </summary>
-    <ul class="menu menu-sm mt-2 gap-1 p-2">
+    <ul class="menu menu-sm mt-2 gap-2 rounded-box border border-dashed border-base-300 p-3">
       {docGroups.map((g) => (
         <>
           <li class="menu-title text-xs">{g.title}</li>
@@ -90,7 +90,7 @@ const { active } = Astro.props
       ))}
     </ul>
   </details>
-  <ul class="menu menu-sm hidden gap-1 rounded-box bg-base-200/60 p-2 md:block">
+  <ul class="menu menu-sm hidden gap-2 rounded-box border border-dashed border-base-300 p-3 md:flex">
     {docGroups.map((g) => (
       <>
         <li class="menu-title text-xs">{g.title}</li>
