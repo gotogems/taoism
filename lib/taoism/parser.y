@@ -136,7 +136,11 @@ rule
     { result = Nodes::Block.new(val[1],
         val[0].start, val[2].end) }
 
-  expr : or_expr { result = val[0] }
+  expr : pipe_expr { result = val[0] }
+
+  pipe_expr : or_expr
+            | pipe_expr PIPE postfix_expr
+    { result = pipe_call(val[0], val[2], val[0].start, val[2].end) }
 
   or_expr : and_expr
           | or_expr OR and_expr
@@ -312,6 +316,14 @@ def on_error(error_id, val, stack)
 end
 
 private
+
+def pipe_call(lhs, rhs, start, finish)
+  if rhs.is_a?(Nodes::Call)
+    Nodes::Call.new(rhs.callee, rhs.args + [lhs], start, finish)
+  else
+    Nodes::Call.new(rhs, [lhs], start, finish)
+  end
+end
 
 def parse_int(tok)
   tok.lexeme.delete('_').to_i

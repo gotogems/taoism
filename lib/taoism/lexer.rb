@@ -95,7 +95,13 @@ module Taoism
       when '&'
         match('&') ? make_token(TokenType::AND) : make_token(TokenType::ILLEGAL)
       when '|'
-        match('|') ? make_token(TokenType::OR) : make_token(TokenType::ILLEGAL)
+        if match('>')
+          make_token(TokenType::PIPE)
+        elsif match('|')
+          make_token(TokenType::OR)
+        else
+          make_token(TokenType::ILLEGAL)
+        end
       when '?' then make_token(TokenType::ILLEGAL)
       when '0'..'9' then number_token
       when '"' then string_token
