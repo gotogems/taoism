@@ -74,7 +74,7 @@ module Taoism
       case char
       when '+' then make_token(TokenType::PLUS)
       when '-'
-      match('>') ? make_token(TokenType::ARROW) : make_token(TokenType::MINUS)
+        match('>') ? make_token(TokenType::ARROW) : make_token(TokenType::MINUS)
       when '*' then make_token(TokenType::STAR)
       when '/' then make_token(TokenType::SLASH)
       when '%' then make_token(TokenType::MODULO)
@@ -102,7 +102,8 @@ module Taoism
         else
           make_token(TokenType::ILLEGAL)
         end
-      when '?' then make_token(TokenType::ILLEGAL)
+      when '?'
+        match('.') ? make_token(TokenType::QDOT) : make_token(TokenType::ILLEGAL)
       when '0'..'9' then number_token
       when '"' then string_token
       else

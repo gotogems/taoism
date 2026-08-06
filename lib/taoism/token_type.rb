@@ -57,6 +57,7 @@ module Taoism
 
     EQARROW = :EQARROW
     ARROW   = :ARROW
+    QDOT    = :QDOT
     EOF     = :EOF
   end
 end

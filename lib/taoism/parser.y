@@ -6,13 +6,13 @@ token
   GREATER GREATEREQ LESS LESSEQ EQUAL EQUALEQ BANG BANGEQ
   AND OR NOT PIPE
   LBRACE RBRACE LSQUARE RSQUARE LPAREN RPAREN
-  COMMA COLON SEMI DOT
+  COMMA COLON SEMI DOT QDOT
   IF ELSE LOOP LEAVE SWITCH
   PACKAGE IMPORT CONST DATA FUN LET MUT TRY RETURN
   EQARROW ARROW EOF
 
 prechigh
-  left DOT LSQUARE LPAREN
+  left DOT QDOT LSQUARE LPAREN
   right UMINUS
   left STAR SLASH MODULO
   left PLUS MINUS
@@ -214,6 +214,9 @@ rule
         val[0].start, val[3].end) }
                | postfix_expr DOT IDENTIFIER
     { result = Nodes::DotExpr.new(val[0], val[2].lexeme,
+        val[0].start, val[2].end) }
+               | postfix_expr QDOT IDENTIFIER
+    { result = Nodes::SafeDot.new(val[0], val[2].lexeme,
         val[0].start, val[2].end) }
 
   primary : INT
